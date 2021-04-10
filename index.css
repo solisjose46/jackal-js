@@ -1,0 +1,32 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+#game, #view{
+    width: 211px;
+}
+#game{
+    height: 300px;
+    border: 1px solid black;
+    margin: auto;
+    margin-top: 50px; /* from doc to top of game*/
+    overflow: hidden;
+}
+#view{
+    height: 100px;
+    border: 2px solid red;
+    position: relative;
+    top: 100px;
+}
+
+#character{
+    width: 20px;
+    height: 25px;
+    position: relative;
+    top: 38px;
+    left: 96px;
+    background-image: url("./tanks/blue-tank-forward.png");
+}
+#stage {
+    margin-top: -888px; /*stage dim:1189x212 */
+}
