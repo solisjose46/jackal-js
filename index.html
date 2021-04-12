@@ -11,14 +11,39 @@
     <title>Jackal</title>
   </head>
   <body>
-
-    <div id="game">
-      <div id="view">
-        <div id="character"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="card text-white bg-dark">
+            <div class="card-header">Updates</div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>4-12-2021:</strong> character can rotate </li>
+              <li class="list-group-item"><strong>4-09-2021:</strong> Created background and character. Move vehicle vertically via WASD keys</li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <img id="stage" alt="stage1" src="./stages/stage1.png">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="card text-white bg-dark">
+            <div class="card-header">FYI</div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Desktop: move with WASD. No mobile support as of yet.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div id="game">
+            <div id="view">
+              <div id="characterbox">
+                <img id="character" alt="character" src="tanks/blue-n.png">
+              </div>
+            </div>
+            <img id="stage" alt="stage1" src="./stages/stage1.png">
+          </div>
+        </div>
+      </div>
     </div>
-    
     <!-- Optional JavaScript; choose one of the two! -->
     <script src="index.js"></script>
     <!-- Option 1: Bootstrap Bundle with Popper -->

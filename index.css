@@ -19,13 +19,12 @@
     top: 100px;
 }
 
-#character{
+#characterbox{
     width: 20px;
     height: 25px;
     position: relative;
     top: 38px;
     left: 96px;
-    background-image: url("./tanks/blue-tank-forward.png");
 }
 #stage {
     margin-top: -888px; /*stage dim:1189x212 */
