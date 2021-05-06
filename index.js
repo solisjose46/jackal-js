@@ -7,7 +7,11 @@ var box = document.getElementById('characterbox');
 
 var character = {
     position: 'north',
-    moving: false
+    boundTop: false,
+    boundBottom: false,
+    boundLeft: false,
+    boundRight: false,
+
 };
 
 var tanklib = [
@@ -50,15 +54,24 @@ var BOUND_BOTTOM = -888;
 
 var MIN_TURNS = 4;
 
-//w (0), a (1), s (2), d (3), w+d (4), w+a (5), s+d (6), s+a (7)
-//var keys = [false, false, false, false, false, false, false, false];
-
 var map = {};
 onkeydown = onkeyup = function(e){
     e = e || event;
     map[e.key] = e.type == 'keydown';
-    /* insert conditional here */
-    if(map['w']){
+    
+    if(map['w'] && map['d']){
+        move('north-east');
+    }
+    else if(map['w'] && map['a']){
+        move('north-west');
+    }
+    else if(map['s'] && map['a']){
+        move('south-west');
+    }
+    else if(map['s'] && map['d']){
+        move('south-east');
+    }
+    else if(map['w']){
         move('north');
     }
     else if(map['d']){
@@ -68,27 +81,11 @@ onkeydown = onkeyup = function(e){
         move('south');
     }
     else if(map['a']){
-        move('west')
+        move('west');
     }
 }
 
-//must hold down key for a second before movement is allowed in that direction
-// function timer(key, dir){
-//     key[key] = true;
-//     var min = Date.now() + 1000;
-//     var testing = setInterval(() => {
-//         window.addEventListener('keyup', ()=>{
-//             clearInterval(testing);
-//             keys[key] = false;
-//         });
-//         if(Date.now() > min){
-//             move(dir);
-//         }
-//     }, 25);
-// }
-
 function move(dir){
-
     if(dir != character.position){
         var position = tanklib.indexOf(tanklib.find(({direction}) => direction === character.position));
         var right = false;
@@ -123,16 +120,103 @@ function move(dir){
         }
         character.position = tanklib[position].direction;
         img.src = tanklib[position].img;
-        console.log(character.position);
     }
     else{
-        //moveX and moveY
+        if(dir == 'north' || dir == 'north-west' || dir == 'north-east'){
+            //left off here, prevent character from moving if at bounds
+            if(character.boundTop != true){
+                moveY('north');
+                if(dir == 'north-west'){
+                    moveX('west');
+                }
+                else if(dir == 'north-east'){
+                    moveX('east');
+                }
+            }
+            else{
+                //make blocked noise
+            }
+        }
+        else if(dir == 'south' || dir == 'south-east' || dir == 'south-west'){
+            moveY('south');
+            if(dir == 'south-east'){
+                moveX('east');
+            }
+            else if(dir == 'south-west'){
+                moveX('west');
+            }
+        }
+        else if(dir == 'east'){
+            moveX('east');
+        }
+        else{
+            moveX('west');
+        }
     }
 }
 
-function moveX(){
-
+function moveX(dir){
+    var num_boxstyle = parseInt(window.getComputedStyle(box).left.replace('px', ''));
+    if(dir == 'east'){
+        if(num_boxstyle < 191){
+            num_boxstyle+=5;
+            box.style.left = num_boxstyle + 'px';
+        }
+    }
+    else{
+        if(num_boxstyle > 0){
+            num_boxstyle-=5;
+            box.style.left = num_boxstyle + 'px';
+        }
+    }
 }
-function moveY(){
 
+function moveY(dir){
+    var num_stagestyle = parseInt(window.getComputedStyle(stage).marginTop.replace('px', ''));
+    var num_viewstyle = parseInt(window.getComputedStyle(view).top.replace('px', ''));
+    var num_boxstyle = parseInt(window.getComputedStyle(box).top.replace('px', ''));
+    if(dir == 'north'){
+        if(num_boxstyle > 37 && num_viewstyle > 199){
+            num_boxstyle-=5;
+            box.style.top = num_boxstyle + 'px';
+        }
+        else if(num_viewstyle > 100){
+            num_viewstyle-=10;
+            view.style.top = num_viewstyle + 'px';
+        }
+        else if(num_stagestyle < BOUND_TOP){
+            num_stagestyle+=10;
+            stage.style.marginTop = num_stagestyle + 'px';
+        }
+        else if(num_viewstyle > 0){
+            num_viewstyle-=10;
+            view.style.top = num_viewstyle + 'px';
+        }
+        else if(num_boxstyle > 0){
+            num_boxstyle-=5;
+            box.style.top = num_boxstyle + 'px';
+        }
+    }
+    else{
+        if(num_boxstyle < 37 && num_viewstyle < 199){
+            num_boxstyle+=5;
+            box.style.top = num_boxstyle + 'px';
+        }
+        else if(num_viewstyle < 100){
+            num_viewstyle+=10;
+            view.style.top = num_viewstyle + 'px';
+        }
+        else if(num_stagestyle > BOUND_BOTTOM){
+            num_stagestyle-=10;
+            stage.style.marginTop = num_stagestyle + 'px';
+        }
+        else if(num_viewstyle < 200){
+            num_viewstyle+=10;
+            view.style.top = num_viewstyle + 'px';
+        }
+        else if(num_boxstyle < 72){
+            num_boxstyle+=5;
+            box.style.top = num_boxstyle + 'px';
+        }
+    }
 }
