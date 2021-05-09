@@ -7,11 +7,6 @@ var box = document.getElementById('characterbox');
 
 var character = {
     position: 'north',
-    boundTop: false,
-    boundBottom: false,
-    boundLeft: false,
-    boundRight: false,
-
 };
 
 var tanklib = [
@@ -83,6 +78,10 @@ onkeydown = onkeyup = function(e){
     else if(map['a']){
         move('west');
     }
+    if(map[' ']){
+        shootRocket();
+        rocketStatus = true;
+    }
 }
 
 function move(dir){
@@ -123,18 +122,12 @@ function move(dir){
     }
     else{
         if(dir == 'north' || dir == 'north-west' || dir == 'north-east'){
-            //left off here, prevent character from moving if at bounds
-            if(character.boundTop != true){
-                moveY('north');
-                if(dir == 'north-west'){
-                    moveX('west');
-                }
-                else if(dir == 'north-east'){
-                    moveX('east');
-                }
+            moveY('north');
+            if(dir == 'north-west'){
+                moveX('west');
             }
-            else{
-                //make blocked noise
+            else if(dir == 'north-east'){
+                moveX('east');
             }
         }
         else if(dir == 'south' || dir == 'south-east' || dir == 'south-west'){
@@ -218,5 +211,127 @@ function moveY(dir){
             num_boxstyle+=5;
             box.style.top = num_boxstyle + 'px';
         }
+    }
+}
+
+//----main character shooting
+
+var rocketStatus = false;
+
+var rocketlib = [
+    {
+        direction: 'south-west',
+        img: 'assets/weapons/rocket-sw.png'
+    },
+    {
+        direction: 'west',
+        img: 'assets/weapons/rocket-w.png'
+    },
+    {
+        direction: 'north-west',
+        img: 'assets/weapons/rocket-nw.png'
+    },
+    {
+        direction: 'north',
+        img: 'assets/weapons/rocket-n.png'
+    },
+    {
+        direction: 'north-east',
+        img: 'assets/weapons/rocket-ne.png'
+    },
+    {
+        direction: 'east',
+        img: 'assets/weapons/rocket-e.png'
+    },
+    {
+        direction: 'south-east',
+        img: 'assets/weapons/rocket-se.png'
+    },
+    {
+        direction: 'south',
+        img: 'assets/weapons/rocket-s.png'
+    }
+];
+
+function shootRocket(){
+    if(!rocketStatus){
+        var rocket = document.createElement('DIV');
+        var rocketimg = document.createElement('IMG');
+
+        var position = tanklib.indexOf(tanklib.find(({direction}) => direction === character.position));
+
+        rocketimg.src = rocketlib[position].img;
+        rocket.appendChild(rocketimg);
+
+        rocket.style.width = '12px';
+        rocket.style.height = '12px';
+
+        rocket.style.position = 'relative';
+
+        var num_left = parseInt(window.getComputedStyle(box).left.replace('px', ''));
+        var num_top = parseInt(window.getComputedStyle(box).top.replace('px', ''));
+
+        num_top = num_top - 35;
+        num_left = num_left + 6;
+
+        rocket.style.left = num_left + 'px';
+        rocket.style.top = num_top + 'px';
+
+        view.appendChild(rocket);
+
+        var flight_time = Date.now() + 1200;
+        //redundant code I know, will reduce later. First get things to work
+        var flight_path = character.position;
+        var flying = setInterval(()=>{
+            if(flight_path == 'west'){
+                num_left-=10;
+                rocket.style.left = num_left + 'px';
+            }
+            else if(flight_path == 'east'){
+                num_left+=10;
+                rocket.style.left = num_left + 'px';
+            }
+            else if(flight_path == 'north' || flight_path == 'north-west' || flight_path == 'north-east'){
+                num_top-=10;
+                if(flight_path == 'north-west'){
+                    num_left-=10;
+                }
+                else if(flight_path == 'north-east'){
+                    num_left+=10;
+                }
+                rocket.style.top = num_top + 'px';
+                rocket.style.left = num_left + 'px';
+            }
+            else{
+                num_top+=10;
+                if(flight_path == 'south-west'){
+                    num_left-=10;
+                }
+                else if(flight_path == 'south-east'){
+                    num_left+=10;
+                }
+                rocket.style.top = num_top + 'px';
+                rocket.style.left = num_left + 'px';
+            }
+            if(Date.now() > flight_time){
+                clearInterval(flying);
+                var explosion = document.createElement('DIV');
+                var explosionimg = document.createElement('IMG');
+                explosionimg.src = 'assets/environment/explosions/explosion.gif';
+                explosion.appendChild(explosionimg);
+                explosion.style.width = '30px';
+                explosion.style.height = '30px';
+                explosion.style.position = 'relative';
+                explosion.style.left = window.getComputedStyle(rocket).left;
+                explosion.style.top = window.getComputedStyle(rocket).top;
+                rocket.remove();
+                view.appendChild(explosion);
+                //add audio
+                setTimeout(()=>{
+                    explosion.remove();
+                },700);
+                rocketStatus = false;
+            }
+        }, 100);
     }
 }

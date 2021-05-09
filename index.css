@@ -14,7 +14,7 @@
 }
 #view{
     height: 100px;
-    border: 2px solid red;
+    /* border: 2px solid red; */
     position: relative;
     top: 100px;
 }
