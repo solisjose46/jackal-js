@@ -194,7 +194,6 @@ function shootRocket(){
 
         rocket.style.width = '12px';
         rocket.style.height = '12px';
-
         rocket.style.position = 'relative';
 
         var num_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
@@ -206,9 +205,9 @@ function shootRocket(){
         rocket.style.left = num_left + 'px';
         rocket.style.top = num_top + 'px';
 
-        view.appendChild(rocket);
+        stage.appendChild(rocket);
 
-        var flight_time = Date.now() + 1300;
+        var flight_time = Date.now() + 1200;
         var flight_path = character.position;
 
         var flying = setInterval(()=>{
@@ -254,7 +253,7 @@ function shootRocket(){
                 explosion.style.left = window.getComputedStyle(rocket).left;
                 explosion.style.top = window.getComputedStyle(rocket).top;
                 rocket.remove();
-                view.appendChild(explosion);
+                stage.appendChild(explosion);
                 //add audio
                 setTimeout(()=>{
                     explosion.remove();
