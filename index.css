@@ -8,30 +8,31 @@
 #game-container{
     height: 300px;
     overflow: hidden;
+    position: relative;
 }
 #stage {
     height: 1189px;
-    position: relative;
+    position: absolute;
     top: -889px; /*stage dim:1189x212 */
 }
 #door1{
     height: 15px;
     width: 30px;
-    position: relative;
-    top: 882px;
-    left: 132px;
+    position: absolute;
+    top: 868px;
+    left: 131px;
     /* display: none; */
 }
 #character-view{
     height: 100px;
-    position: relative;
-    top: 1089px;
+    position: absolute;
+    top: 200px;
     border: red solid 2px;
 }
 #character-container{
     width: 20px;
     height: 25px;
-    position: relative;
+    position: absolute;
     top: 38px;
     left: 96px;
 }

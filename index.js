@@ -43,11 +43,6 @@ var tank_lib = [
     }
 ];
 
-var BOUND_TOP = -105; //in px
-var BOUND_BOTTOM = -888;
-
-var MIN_TURNS = 4;
-
 var map = {};
 onkeydown = onkeyup = function(e){
     e = e || event;
@@ -88,6 +83,7 @@ function move(dir){
         var position = tank_lib.indexOf(tank_lib.find(({direction}) => direction === character.position));
         var right = false;
         var curr_position = position;
+        var MIN_TURNS = 4;
         for(var i=0; i < MIN_TURNS; i++){
             if(curr_position != 7){
                 curr_position++;
@@ -165,26 +161,23 @@ function moveX(dir){
 
 function moveY(dir){
     //left off here, fix with new bounds
+
+    var BOUND_TOP = 0; //in px
+    var BOUND_BOTTOM = -888;
+
     var num_stage_style = parseInt(window.getComputedStyle(stage).top.replace('px', ''));
     var num_view_style = parseInt(window.getComputedStyle(view).top.replace('px', ''));
     var num_box_style = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
     //between character-view and stage
     var STAGE_BOUND = {
-        top: 5 //between
+        top: 989
     };
     var VIEW_BOUND = {
         top: 38
     }
 
     if(dir == 'north'){
-        if(num_view_style > STAGE_BOUND.top){
-            num_view_style-=5;
-            view.style.top = num_view_style + 'px';
-        }
-        else if(num_box_style > VIEW_BOUND.top){
-            num_box_style-=5;
-            character_container.style.top = num_box_style + 'px';
-        }
+        //if(num_view_style) HERE!
     }
     else{
         // if(num_box_style < 37 && num_view_style < 199){
