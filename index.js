@@ -1,15 +1,14 @@
-var game = document.getElementById('game');
-var view = document.getElementById('view');
+var game = document.getElementById('game-container');
+var view = document.getElementById('character-view');
 var stage = document.getElementById('stage');
-
-var img = document.getElementById('character');
-var box = document.getElementById('characterbox');
+var character_img = document.getElementById('character');
+var character_container = document.getElementById('character-container');
 
 var character = {
     position: 'north',
 };
 
-var tanklib = [
+var tank_lib = [
     {
         direction: 'south-west',
         img: 'tanks/blue-sw.png'
@@ -86,7 +85,7 @@ onkeydown = onkeyup = function(e){
 
 function move(dir){
     if(dir != character.position){
-        var position = tanklib.indexOf(tanklib.find(({direction}) => direction === character.position));
+        var position = tank_lib.indexOf(tank_lib.find(({direction}) => direction === character.position));
         var right = false;
         var curr_position = position;
         for(var i=0; i < MIN_TURNS; i++){
@@ -96,7 +95,7 @@ function move(dir){
             else{
                 curr_position = 0;
             }
-            if(tanklib[curr_position].direction == dir){
+            if(tank_lib[curr_position].direction == dir){
                 right = true;
                 break;
             }
@@ -117,8 +116,8 @@ function move(dir){
                 position = 7;
             }
         }
-        character.position = tanklib[position].direction;
-        img.src = tanklib[position].img;
+        character.position = tank_lib[position].direction;
+        character_img.src = tank_lib[position].img;
     }
     else{
         if(dir == 'north' || dir == 'north-west' || dir == 'north-east'){
@@ -149,67 +148,68 @@ function move(dir){
 }
 
 function moveX(dir){
-    var num_boxstyle = parseInt(window.getComputedStyle(box).left.replace('px', ''));
+    var num_box_style = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
     if(dir == 'east'){
-        if(num_boxstyle < 191){
-            num_boxstyle+=5;
-            box.style.left = num_boxstyle + 'px';
+        if(num_box_style < 191){
+            num_box_style+=5;
+            character_container.style.left = num_box_style + 'px';
         }
     }
     else{
-        if(num_boxstyle > 0){
-            num_boxstyle-=5;
-            box.style.left = num_boxstyle + 'px';
+        if(num_box_style > 0){
+            num_box_style-=5;
+            character_container.style.left = num_box_style + 'px';
         }
     }
 }
 
 function moveY(dir){
-    var num_stagestyle = parseInt(window.getComputedStyle(stage).marginTop.replace('px', ''));
-    var num_viewstyle = parseInt(window.getComputedStyle(view).top.replace('px', ''));
-    var num_boxstyle = parseInt(window.getComputedStyle(box).top.replace('px', ''));
+    //left off here, fix with new bounds
+    var num_stage_style = parseInt(window.getComputedStyle(stage).top.replace('px', ''));
+    var num_view_style = parseInt(window.getComputedStyle(view).top.replace('px', ''));
+    var num_box_style = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
     if(dir == 'north'){
-        if(num_boxstyle > 37 && num_viewstyle > 199){
-            num_boxstyle-=5;
-            box.style.top = num_boxstyle + 'px';
+        if(num_box_style > 37 && num_view_style > 199){
+            num_box_style-=5;
+            character_container.style.top = num_box_style + 'px';
         }
-        else if(num_viewstyle > 100){
-            num_viewstyle-=10;
-            view.style.top = num_viewstyle + 'px';
+        else if(num_view_style > 100){
+            num_view_style-=10;
+            view.style.top = num_view_style + 'px';
         }
-        else if(num_stagestyle < BOUND_TOP){
-            num_stagestyle+=10;
-            stage.style.marginTop = num_stagestyle + 'px';
+        else if(num_stage_style < BOUND_TOP){
+            num_stage_style+=10;
+            stage.style.top = num_stage_style + 'px';
         }
-        else if(num_viewstyle > 0){
-            num_viewstyle-=10;
-            view.style.top = num_viewstyle + 'px';
+        else if(num_view_style > 0){
+            num_view_style-=10;
+            view.style.top = num_view_style + 'px';
         }
-        else if(num_boxstyle > 0){
-            num_boxstyle-=5;
-            box.style.top = num_boxstyle + 'px';
+        else if(num_box_style > 0){
+            num_box_style-=5;
+            character_container.style.top = num_box_style + 'px';
         }
     }
     else{
-        if(num_boxstyle < 37 && num_viewstyle < 199){
-            num_boxstyle+=5;
-            box.style.top = num_boxstyle + 'px';
+        if(num_box_style < 37 && num_view_style < 199){
+            num_box_style+=5;
+            character_container.style.top = num_box_style + 'px';
         }
-        else if(num_viewstyle < 100){
+        else if(num_view_style < 100){
             num_viewstyle+=10;
-            view.style.top = num_viewstyle + 'px';
+            view.style.top = num_view_style + 'px';
         }
-        else if(num_stagestyle > BOUND_BOTTOM){
-            num_stagestyle-=10;
-            stage.style.marginTop = num_stagestyle + 'px';
+        else if(num_stage_style > BOUND_BOTTOM){
+            num_stage_style-=10;
+            stage.style.top = num_stage_style + 'px';
         }
-        else if(num_viewstyle < 200){
-            num_viewstyle+=10;
-            view.style.top = num_viewstyle + 'px';
+        else if(num_view_style < 200){
+            num_view_style+=10;
+            view.style.top = num_view_style + 'px';
         }
-        else if(num_boxstyle < 72){
-            num_boxstyle+=5;
-            box.style.top = num_boxstyle + 'px';
+        else if(num_box_style < 72){
+            num_box_style+=5;
+            character_container.style.top = num_box_style + 'px';
         }
     }
 }
@@ -218,7 +218,7 @@ function moveY(dir){
 
 var rocketStatus = false;
 
-var rocketlib = [
+var rocket_lib = [
     {
         direction: 'south-west',
         img: 'assets/weapons/rocket-sw.png'
@@ -256,20 +256,20 @@ var rocketlib = [
 function shootRocket(){
     if(!rocketStatus){
         var rocket = document.createElement('DIV');
-        var rocketimg = document.createElement('IMG');
+        var rocket_img = document.createElement('IMG');
 
-        var position = tanklib.indexOf(tanklib.find(({direction}) => direction === character.position));
+        var position = tank_lib.indexOf(tank_lib.find(({direction}) => direction === character.position));
 
-        rocketimg.src = rocketlib[position].img;
-        rocket.appendChild(rocketimg);
+        rocket_img.src = rocket_lib[position].img;
+        rocket.appendChild(rocket_img);
 
         rocket.style.width = '12px';
         rocket.style.height = '12px';
 
         rocket.style.position = 'relative';
 
-        var num_left = parseInt(window.getComputedStyle(box).left.replace('px', ''));
-        var num_top = parseInt(window.getComputedStyle(box).top.replace('px', ''));
+        var num_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
+        var num_top = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
 
         num_top = num_top - 35;
         num_left = num_left + 6;
@@ -279,9 +279,9 @@ function shootRocket(){
 
         view.appendChild(rocket);
 
-        var flight_time = Date.now() + 1200;
-        //redundant code I know, will reduce later. First get things to work
+        var flight_time = Date.now() + 1300;
         var flight_path = character.position;
+
         var flying = setInterval(()=>{
             if(flight_path == 'west'){
                 num_left-=10;
@@ -316,9 +316,9 @@ function shootRocket(){
             if(Date.now() > flight_time){
                 clearInterval(flying);
                 var explosion = document.createElement('DIV');
-                var explosionimg = document.createElement('IMG');
-                explosionimg.src = 'assets/environment/explosions/explosion.gif';
-                explosion.appendChild(explosionimg);
+                var explosion_img = document.createElement('IMG');
+                explosion_img.src = 'assets/environment/explosions/explosion.gif';
+                explosion.appendChild(explosion_img);
                 explosion.style.width = '30px';
                 explosion.style.height = '30px';
                 explosion.style.position = 'relative';

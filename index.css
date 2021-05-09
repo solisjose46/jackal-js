@@ -2,30 +2,36 @@
     padding: 0;
     margin: 0;
 }
-#game, #view{
+#game-container, #stage, #character-view{
     width: 211px;
 }
-#game{
+#game-container{
     height: 300px;
-    border: 1px solid black;
-    margin: auto;
-    margin-top: 50px; /* from doc to top of game*/
     overflow: hidden;
 }
-#view{
-    height: 100px;
-    /* border: 2px solid red; */
+#stage {
+    height: 1189px;
     position: relative;
-    top: 100px;
+    top: -888px; /*stage dim:1189x212 */
 }
-
-#characterbox{
+#door1{
+    height: 15px;
+    width: 30px;
+    position: relative;
+    top: 882px;
+    left: 132px;
+    /* display: none; */
+}
+#character-view{
+    height: 100px;
+    position: relative;
+    top: 1089px;
+    border: red solid 2px;
+}
+#character-container{
     width: 20px;
     height: 25px;
     position: relative;
     top: 38px;
     left: 96px;
-}
-#stage {
-    margin-top: -888px; /*stage dim:1189x212 */
 }
