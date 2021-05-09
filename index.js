@@ -168,49 +168,45 @@ function moveY(dir){
     var num_stage_style = parseInt(window.getComputedStyle(stage).top.replace('px', ''));
     var num_view_style = parseInt(window.getComputedStyle(view).top.replace('px', ''));
     var num_box_style = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
+    //between character-view and stage
+    var STAGE_BOUND = {
+        top: 5 //between
+    };
+    var VIEW_BOUND = {
+        top: 38
+    }
+
     if(dir == 'north'){
-        if(num_box_style > 37 && num_view_style > 199){
-            num_box_style-=5;
-            character_container.style.top = num_box_style + 'px';
-        }
-        else if(num_view_style > 100){
-            num_view_style-=10;
+        if(num_view_style > STAGE_BOUND.top){
+            num_view_style-=5;
             view.style.top = num_view_style + 'px';
         }
-        else if(num_stage_style < BOUND_TOP){
-            num_stage_style+=10;
-            stage.style.top = num_stage_style + 'px';
-        }
-        else if(num_view_style > 0){
-            num_view_style-=10;
-            view.style.top = num_view_style + 'px';
-        }
-        else if(num_box_style > 0){
+        else if(num_box_style > VIEW_BOUND.top){
             num_box_style-=5;
             character_container.style.top = num_box_style + 'px';
         }
     }
     else{
-        if(num_box_style < 37 && num_view_style < 199){
-            num_box_style+=5;
-            character_container.style.top = num_box_style + 'px';
-        }
-        else if(num_view_style < 100){
-            num_viewstyle+=10;
-            view.style.top = num_view_style + 'px';
-        }
-        else if(num_stage_style > BOUND_BOTTOM){
-            num_stage_style-=10;
-            stage.style.top = num_stage_style + 'px';
-        }
-        else if(num_view_style < 200){
-            num_view_style+=10;
-            view.style.top = num_view_style + 'px';
-        }
-        else if(num_box_style < 72){
-            num_box_style+=5;
-            character_container.style.top = num_box_style + 'px';
-        }
+        // if(num_box_style < 37 && num_view_style < 199){
+        //     num_box_style+=5;
+        //     character_container.style.top = num_box_style + 'px';
+        // }
+        // else if(num_view_style < 100){
+        //     num_viewstyle+=10;
+        //     view.style.top = num_view_style + 'px';
+        // }
+        // else if(num_stage_style > BOUND_BOTTOM){
+        //     num_stage_style-=10;
+        //     stage.style.top = num_stage_style + 'px';
+        // }
+        // else if(num_view_style < 200){
+        //     num_view_style+=10;
+        //     view.style.top = num_view_style + 'px';
+        // }
+        // else if(num_box_style < 72){
+        //     num_box_style+=5;
+        //     character_container.style.top = num_box_style + 'px';
+        // }
     }
 }
 
