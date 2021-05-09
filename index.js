@@ -1,48 +1,3 @@
-var game = document.getElementById('game-container');
-var view = document.getElementById('character-view');
-var stage = document.getElementById('stage');
-var character_img = document.getElementById('character');
-var character_container = document.getElementById('character-container');
-
-var character = {
-    position: 'north',
-};
-
-var tank_lib = [
-    {
-        direction: 'south-west',
-        img: 'tanks/blue-sw.png'
-    },
-    {
-        direction: 'west',
-        img: 'tanks/blue-w.png'
-    },
-    {
-        direction: 'north-west',
-        img: 'tanks/blue-nw.png'
-    },
-    {
-        direction: 'north',
-        img: 'tanks/blue-n.png'
-    },
-    {
-        direction: 'north-east',
-        img: 'tanks/blue-ne.png'
-    },
-    {
-        direction: 'east',
-        img: 'tanks/blue-e.png'
-    },
-    {
-        direction: 'south-east',
-        img: 'tanks/blue-se.png'
-    },
-    {
-        direction: 'south',
-        img: 'tanks/blue-s.png'
-    }
-];
-
 var map = {};
 onkeydown = onkeyup = function(e){
     e = e || event;
@@ -144,106 +99,91 @@ function move(dir){
 }
 
 function moveX(dir){
-    var num_box_style = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
+    var num_character_style = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
+    var BOUNDS = {
+        right: 185,
+        left: 0
+    }
     if(dir == 'east'){
-        if(num_box_style < 191){
-            num_box_style+=5;
-            character_container.style.left = num_box_style + 'px';
+        if(num_character_style < BOUNDS.right){
+            num_character_style+=5;
+            character_container.style.left = num_character_style + 'px';
         }
     }
     else{
-        if(num_box_style > 0){
-            num_box_style-=5;
-            character_container.style.left = num_box_style + 'px';
+        if(num_character_style > BOUNDS.left){
+            num_character_style-=5;
+            character_container.style.left = num_character_style + 'px';
         }
     }
 }
 
 function moveY(dir){
-    //left off here, fix with new bounds
-
-    var BOUND_TOP = 0; //in px
-    var BOUND_BOTTOM = -888;
-
     var num_stage_style = parseInt(window.getComputedStyle(stage).top.replace('px', ''));
     var num_view_style = parseInt(window.getComputedStyle(view).top.replace('px', ''));
-    var num_box_style = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
-    //between character-view and stage
-    var STAGE_BOUND = {
-        top: 989
-    };
-    var VIEW_BOUND = {
-        top: 38
+    var num_character_style = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
+
+    var BOUNDS = {
+        stage_bottom: -890,
+        stage_top: 0,
+        view_bottom: 200,
+        view_center_top: 100,
+        view_top: 0,
+        character_bottom: 75,
+        character_center_top: 40,
+        character_top: 0
     }
 
     if(dir == 'north'){
-        //if(num_view_style) HERE!
+        if(num_character_style > BOUNDS.character_center_top){
+            num_character_style-=5;
+            character_container.style.top = num_character_style + 'px';
+        }
+        else if(num_view_style > BOUNDS.view_center_top){
+            num_view_style-=5;
+            view.style.top = num_view_style + 'px';
+        }
+        else if(num_stage_style < BOUNDS.stage_top){
+            num_stage_style+=5;
+            stage.style.top = num_stage_style + 'px';
+        }
+        else if(num_view_style > BOUNDS.view_top){
+            num_view_style-=5;
+            view.style.top = num_view_style + 'px';
+        }
+        else if (num_character_style > BOUNDS.character_top){
+            num_character_style-=5;
+            character_container.style.top = num_character_style + 'px';
+        }
     }
     else{
-        // if(num_box_style < 37 && num_view_style < 199){
-        //     num_box_style+=5;
-        //     character_container.style.top = num_box_style + 'px';
-        // }
-        // else if(num_view_style < 100){
-        //     num_viewstyle+=10;
-        //     view.style.top = num_view_style + 'px';
-        // }
-        // else if(num_stage_style > BOUND_BOTTOM){
-        //     num_stage_style-=10;
-        //     stage.style.top = num_stage_style + 'px';
-        // }
-        // else if(num_view_style < 200){
-        //     num_view_style+=10;
-        //     view.style.top = num_view_style + 'px';
-        // }
-        // else if(num_box_style < 72){
-        //     num_box_style+=5;
-        //     character_container.style.top = num_box_style + 'px';
-        // }
+        if(num_character_style < BOUNDS.character_center_top){
+            num_character_style+=5;
+            character_container.style.top = num_character_style + 'px';
+        }
+        else if(num_view_style < BOUNDS.view_center_top){
+            num_view_style+=5;
+            view.style.top = num_view_style + 'px';
+        }
+        else if(num_stage_style > BOUNDS.stage_bottom){
+            num_stage_style-=5;
+            stage.style.top = num_stage_style + 'px';
+        }
+        else if(num_view_style < BOUNDS.view_bottom){
+            num_view_style+=5;
+            view.style.top = num_view_style + 'px';
+        }
+        else if(num_character_style < BOUNDS.character_bottom){
+            num_character_style+=5;
+            character_container.style.top = num_character_style + 'px';
+        }
     }
 }
 
 //----main character shooting
-
-var rocketStatus = false;
-
-var rocket_lib = [
-    {
-        direction: 'south-west',
-        img: 'assets/weapons/rocket-sw.png'
-    },
-    {
-        direction: 'west',
-        img: 'assets/weapons/rocket-w.png'
-    },
-    {
-        direction: 'north-west',
-        img: 'assets/weapons/rocket-nw.png'
-    },
-    {
-        direction: 'north',
-        img: 'assets/weapons/rocket-n.png'
-    },
-    {
-        direction: 'north-east',
-        img: 'assets/weapons/rocket-ne.png'
-    },
-    {
-        direction: 'east',
-        img: 'assets/weapons/rocket-e.png'
-    },
-    {
-        direction: 'south-east',
-        img: 'assets/weapons/rocket-se.png'
-    },
-    {
-        direction: 'south',
-        img: 'assets/weapons/rocket-s.png'
-    }
-];
-
 function shootRocket(){
     if(!rocketStatus){
+        //should append rocket to stage because if character moves in view then so does rocket
         var rocket = document.createElement('DIV');
         var rocket_img = document.createElement('IMG');
 
