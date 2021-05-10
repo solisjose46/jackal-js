@@ -21,13 +21,13 @@
     position: absolute;
     top: 868px;
     left: 131px;
-    display: none;
+    /* display: none; */
 }
 #character-view{
     height: 100px;
     position: absolute;
     top: 200px;
-    /* border: red solid 2px; */
+    border: red solid 2px;
 }
 #character-container{
     width: 20px;
@@ -35,4 +35,5 @@
     position: absolute;
     top: 40px;
     left: 90px;
+    border: blue solid 2px;
 }

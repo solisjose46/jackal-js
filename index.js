@@ -184,6 +184,7 @@ function moveY(dir){
 function shootRocket(){
     if(!rocketStatus){
         //should append rocket to stage because if character moves in view then so does rocket
+        //fix this next!
         var rocket = document.createElement('DIV');
         var rocket_img = document.createElement('IMG');
 
@@ -194,13 +195,13 @@ function shootRocket(){
 
         rocket.style.width = '12px';
         rocket.style.height = '12px';
-        rocket.style.position = 'relative';
+        rocket.style.position = 'absolute';
 
         var num_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
-        var num_top = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
+        var num_top = Math.abs(parseInt(window.getComputedStyle(stage).top.replace('px', ''))) + parseInt(window.getComputedStyle(view).top.replace('px', '')) + parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
 
-        num_top = num_top - 35;
-        num_left = num_left + 6;
+        console.log(num_top);
+        console.log(num_left);
 
         rocket.style.left = num_left + 'px';
         rocket.style.top = num_top + 'px';
@@ -249,7 +250,7 @@ function shootRocket(){
                 explosion.appendChild(explosion_img);
                 explosion.style.width = '30px';
                 explosion.style.height = '30px';
-                explosion.style.position = 'relative';
+                explosion.style.position = 'absolute';
                 explosion.style.left = window.getComputedStyle(rocket).left;
                 explosion.style.top = window.getComputedStyle(rocket).top;
                 rocket.remove();
