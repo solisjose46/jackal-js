@@ -17,15 +17,16 @@
           <div class="card text-white bg-dark">
             <div class="card-header">Updates</div>
             <ul class="list-group list-group-flush">
+              <li class="list-group-item"><strong>5-10-2021:</strong> Added environment and enemy graphics and worked on mechanics.</li>
+              <li class="list-group-item"><strong>5-08-2021:</strong> Improved wasd controls. Added shooting and animations.</li>
               <li class="list-group-item"><strong>4-12-2021:</strong> character can rotate and move around. </li>
               <li class="list-group-item"><strong>4-09-2021:</strong> Created background and character. Move vehicle vertically via WASD keys</li>
-              <li class="list-group-item"><strong>5-08-2021:</strong> Improved wasd controls. Added shooting and animations.</li>
             </ul>
           </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-md-3">
+        <div class="col">
           <div class="card text-white bg-dark">
             <div class="card-header">FYI</div>
             <ul class="list-group list-group-flush">
@@ -33,13 +34,19 @@
             </ul>
           </div>
         </div>
-        <div class="col-md-9">
-          <div id="game-container">
-            <div id="stage">
-              <div id="door1"><img alt='door' src="assets/environment/infrastructure/door_2.png"></div>
-              <img alt="stage1" src="./stages/stage1.png">
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="row"><div class="col" id="game-title"><img alt="title" src="assets/title/title.png"></div></div>
+          <div class="row">
+            <div class="col" id="game-container">
+              <div id="stage">
+                <div id="door"><img alt="door" src="assets/environment/infrastructure/broken-door.png"></div>
+                <div id="pad"><img alt="pad" src="assets/environment/infrastructure/landing-pad.gif"></div>
+                <img alt="stage1" src="./stages/Jackal-Stage1.png">
+              </div>
+              <div id="character-view"><div id="character-container"><img id="character" alt="character" src="tanks/blue-n.png"></div></div>
             </div>
-            <div id="character-view"><div id="character-container"><img id="character" alt="character" src="tanks/blue-n.png"></div></div>
           </div>
         </div>
       </div>

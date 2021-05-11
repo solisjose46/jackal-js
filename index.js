@@ -1,3 +1,4 @@
+document.addEventListener('load', loadEnemies());
 var map = {};
 onkeydown = onkeyup = function(e){
     e = e || event;
@@ -29,7 +30,7 @@ onkeydown = onkeyup = function(e){
     }
     if(map[' ']){
         shootRocket();
-        rocketStatus = true;
+        character.rocketStatus = true;
     }
 }
 
@@ -97,34 +98,38 @@ function move(dir){
         }
     }
 }
-
+//fix this for new stage, move faster
 function moveX(dir){
     var num_character_style = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
     var BOUNDS = {
-        right: 185,
+        right: 490,
         left: 0
     }
+
+    //var SPEED_LIMIT = 5;
+    var SPEED_LIMIT = 20; //temp
+    
     if(dir == 'east'){
         if(num_character_style < BOUNDS.right){
-            num_character_style+=5;
+            num_character_style+=SPEED_LIMIT;
             character_container.style.left = num_character_style + 'px';
         }
     }
     else{
         if(num_character_style > BOUNDS.left){
-            num_character_style-=5;
+            num_character_style-=SPEED_LIMIT;
             character_container.style.left = num_character_style + 'px';
         }
     }
 }
-
+//fix this for new stage, move faster
 function moveY(dir){
     var num_stage_style = parseInt(window.getComputedStyle(stage).top.replace('px', ''));
     var num_view_style = parseInt(window.getComputedStyle(view).top.replace('px', ''));
     var num_character_style = parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
 
     var BOUNDS = {
-        stage_bottom: -890,
+        stage_bottom: -2570,
         stage_top: 0,
         view_bottom: 200,
         view_center_top: 100,
@@ -134,57 +139,58 @@ function moveY(dir){
         character_top: 0
     }
 
+    //var SPEED_LIMIT = 5;
+    var SPEED_LIMIT = 20; //temp
+
     if(dir == 'north'){
         if(num_character_style > BOUNDS.character_center_top){
-            num_character_style-=5;
+            num_character_style-=SPEED_LIMIT;
             character_container.style.top = num_character_style + 'px';
         }
         else if(num_view_style > BOUNDS.view_center_top){
-            num_view_style-=5;
+            num_view_style-=SPEED_LIMIT;
             view.style.top = num_view_style + 'px';
         }
         else if(num_stage_style < BOUNDS.stage_top){
-            num_stage_style+=5;
+            num_stage_style+=SPEED_LIMIT;
             stage.style.top = num_stage_style + 'px';
         }
         else if(num_view_style > BOUNDS.view_top){
-            num_view_style-=5;
+            num_view_style-=SPEED_LIMIT;
             view.style.top = num_view_style + 'px';
         }
         else if (num_character_style > BOUNDS.character_top){
-            num_character_style-=5;
+            num_character_style-=SPEED_LIMIT;
             character_container.style.top = num_character_style + 'px';
         }
     }
     else{
         if(num_character_style < BOUNDS.character_center_top){
-            num_character_style+=5;
+            num_character_style+=SPEED_LIMIT;
             character_container.style.top = num_character_style + 'px';
         }
         else if(num_view_style < BOUNDS.view_center_top){
-            num_view_style+=5;
+            num_view_style+=SPEED_LIMIT;
             view.style.top = num_view_style + 'px';
         }
         else if(num_stage_style > BOUNDS.stage_bottom){
-            num_stage_style-=5;
+            num_stage_style-=SPEED_LIMIT;
             stage.style.top = num_stage_style + 'px';
         }
         else if(num_view_style < BOUNDS.view_bottom){
-            num_view_style+=5;
+            num_view_style+=SPEED_LIMIT;
             view.style.top = num_view_style + 'px';
         }
         else if(num_character_style < BOUNDS.character_bottom){
-            num_character_style+=5;
+            num_character_style+=SPEED_LIMIT;
             character_container.style.top = num_character_style + 'px';
         }
     }
 }
-
 //----main character shooting
+//need faster rocket and longer range
 function shootRocket(){
-    if(!rocketStatus){
-        //should append rocket to stage because if character moves in view then so does rocket
-        //fix this next!
+    if(!character.rocketStatus){
         var rocket = document.createElement('DIV');
         var rocket_img = document.createElement('IMG');
 
@@ -200,9 +206,6 @@ function shootRocket(){
         var num_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
         var num_top = Math.abs(parseInt(window.getComputedStyle(stage).top.replace('px', ''))) + parseInt(window.getComputedStyle(view).top.replace('px', '')) + parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
 
-        console.log(num_top);
-        console.log(num_left);
-
         rocket.style.left = num_left + 'px';
         rocket.style.top = num_top + 'px';
 
@@ -210,34 +213,35 @@ function shootRocket(){
 
         var flight_time = Date.now() + 1200;
         var flight_path = character.position;
+        var ROCKET_SPEED = 10;
 
         var flying = setInterval(()=>{
             if(flight_path == 'west'){
-                num_left-=10;
+                num_left-=ROCKET_SPEED;
                 rocket.style.left = num_left + 'px';
             }
             else if(flight_path == 'east'){
-                num_left+=10;
+                num_left+=ROCKET_SPEED;
                 rocket.style.left = num_left + 'px';
             }
             else if(flight_path == 'north' || flight_path == 'north-west' || flight_path == 'north-east'){
-                num_top-=10;
+                num_top-=ROCKET_SPEED;
                 if(flight_path == 'north-west'){
-                    num_left-=10;
+                    num_left-=ROCKET_SPEED;
                 }
                 else if(flight_path == 'north-east'){
-                    num_left+=10;
+                    num_left+=ROCKET_SPEED;
                 }
                 rocket.style.top = num_top + 'px';
                 rocket.style.left = num_left + 'px';
             }
             else{
-                num_top+=10;
+                num_top+=ROCKET_SPEED;
                 if(flight_path == 'south-west'){
-                    num_left-=10;
+                    num_left-=ROCKET_SPEED;
                 }
                 else if(flight_path == 'south-east'){
-                    num_left+=10;
+                    num_left+=ROCKET_SPEED;
                 }
                 rocket.style.top = num_top + 'px';
                 rocket.style.left = num_left + 'px';
@@ -259,8 +263,21 @@ function shootRocket(){
                 setTimeout(()=>{
                     explosion.remove();
                 },700);
-                rocketStatus = false;
+                character.rocketStatus = false;
             }
         }, 100);
     }
 }
+//enemies
+ function loadEnemies(){
+     for(var i = 0; i < enemies.length; i++){
+         var temp_container = document.createElement('DIV');
+         var temp_img = document.createElement('IMG');
+         temp_img.src = "enemies/turret-s.png";
+         temp_container.appendChild(temp_img);
+         temp_container.classList.add("turret");
+         temp_container.style.left = enemies[i].left;
+         temp_container.style.top = enemies[i].top;
+         stage.appendChild(temp_container);
+     }
+ }

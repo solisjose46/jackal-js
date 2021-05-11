@@ -2,8 +2,11 @@
     padding: 0;
     margin: 0;
 }
-#game-container, #stage, #character-view{
-    width: 210px;
+#game-container, #stage, #character-view, #game-title{
+    width: 510px;
+}
+#game-title{
+    height: 60px;
 }
 #game-container{
     height: 300px;
@@ -11,17 +14,9 @@
     position: relative;
 }
 #stage {
-    height: 1190px;
+    height: 2870px;
     position: absolute;
-    top: -890px; /*stage dim:1189x212 */
-}
-#door1{
-    height: 15px;
-    width: 30px;
-    position: absolute;
-    top: 868px;
-    left: 131px;
-    /* display: none; */
+    top: -2570px;
 }
 #character-view{
     height: 100px;
@@ -36,4 +31,25 @@
     top: 40px;
     left: 90px;
     border: blue solid 2px;
+}
+.turret{
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    background-color: red;
+}
+#door{
+    height: 32px;
+    width: 80px;
+    position: absolute;
+    top: 2111px;
+    left: 312px;
+    /* display: none; */
+}
+#pad{
+    height: 100px;
+    width: 130px;
+    position: absolute;
+    top: 510px;
+    left: 190px;
 }

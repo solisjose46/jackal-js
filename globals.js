@@ -6,6 +6,7 @@ var character_container = document.getElementById('character-container');
 
 var character = {
     position: 'north',
+    rocketStatus: false
 };
 
 var tank_lib = [
@@ -43,8 +44,6 @@ var tank_lib = [
     }
 ];
 
-var rocketStatus = false;
-
 var rocket_lib = [
     {
         direction: 'south-west',
@@ -77,5 +76,68 @@ var rocket_lib = [
     {
         direction: 'south',
         img: 'assets/weapons/rocket-s.png'
+    }
+];
+
+var enemies = [
+    {
+        left: '97px',
+        top: '2495px'
+    },
+    {
+        left: '191px',
+        top: '2351px'
+    },
+    {
+        left: '95px',
+        top: '2191px'
+    },
+    {
+        left: '255px',
+        top: '2191px'
+    },
+    {
+        left: '353px',
+        top: '2191px'
+    },
+    {
+        left: '193px',
+        top: '1119px'
+    },
+    {
+        left: '256px',
+        top: '1119px'
+    },
+    {
+        left: '65px',
+        top: '911px'
+    },
+    {
+        left: '255px',
+        top: '911px'
+    },
+    {
+        left: '289px',
+        top: '879px'
+    },
+    {
+        left: '319px',
+        top: '845px'
+    },
+    {
+        left: '191px',
+        top: '637px'
+    },
+    {
+        left: '320px',
+        top: '637px'
+    },
+    {
+        left: '384px',
+        top: '637px'
+    },
+    {
+        left: '128px',
+        top: '542px'
     }
 ];
