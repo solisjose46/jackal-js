@@ -192,6 +192,7 @@ function moveY(dir){
 function shootRocket(){
     if(!character.rocketStatus){
         var rocket = document.createElement('DIV');
+        rocket.id = 'rocket';
         var rocket_img = document.createElement('IMG');
 
         var position = tank_lib.indexOf(tank_lib.find(({direction}) => direction === character.position));
@@ -211,9 +212,12 @@ function shootRocket(){
 
         stage.appendChild(rocket);
 
-        var flight_time = Date.now() + 1200;
+        var flight_time = Date.now() + 1100;
+        //var flight_time = Date.now() + 1500;
         var flight_path = character.position;
-        var ROCKET_SPEED = 10;
+        //var ROCKET_SPEED = 10;
+        var ROCKET_SPEED = 20; //px
+        var INTERVAL_TIME = 100; //ms
 
         var flying = setInterval(()=>{
             if(flight_path == 'west'){
@@ -246,6 +250,8 @@ function shootRocket(){
                 rocket.style.top = num_top + 'px';
                 rocket.style.left = num_left + 'px';
             }
+            //loop to detect hit on enemies
+            var impact = collision();
             if(Date.now() > flight_time){
                 clearInterval(flying);
                 var explosion = document.createElement('DIV');
@@ -262,22 +268,65 @@ function shootRocket(){
                 //add audio
                 setTimeout(()=>{
                     explosion.remove();
-                },700);
+                },500);
                 character.rocketStatus = false;
             }
-        }, 100);
+            if(impact.status){
+                //use found class position to remove enemy
+                var turret = document.getElementsByClassName('turret')[impact.position];
+                turret.remove();
+                console.log('boom!');
+            }
+            else{
+                console.log('miss');
+            }
+        }, INTERVAL_TIME);
     }
 }
 //enemies
- function loadEnemies(){
-     for(var i = 0; i < enemies.length; i++){
-         var temp_container = document.createElement('DIV');
-         var temp_img = document.createElement('IMG');
-         temp_img.src = "enemies/turret-s.png";
-         temp_container.appendChild(temp_img);
-         temp_container.classList.add("turret");
-         temp_container.style.left = enemies[i].left;
-         temp_container.style.top = enemies[i].top;
-         stage.appendChild(temp_container);
-     }
- }
+function loadEnemies(){
+    for(var i = 0; i < enemies.length; i++){
+        var temp_container = document.createElement('DIV');
+        var temp_img = document.createElement('IMG');
+        temp_img.src = "enemies/turret-s.png";
+        temp_container.appendChild(temp_img);
+        temp_container.classList.add('turret');
+        temp_container.style.left = enemies[i].left;
+        temp_container.style.top = enemies[i].top;
+        stage.appendChild(temp_container);
+    }
+}
+
+function collision(){
+    var toReturn = {
+        status: false,
+        position: null
+    };
+
+    var position = findTurret();
+    if(typeof position != 'undefined'){
+        toReturn.status = true;
+        toReturn.position = position;
+    }
+    return toReturn;
+}
+//helper function
+function findTurret(){
+    var turrets = Array.from(document.getElementsByClassName('turret'));
+
+    var rocket = document.getElementById('rocket');
+    var rocket_left = parseInt(window.getComputedStyle(rocket).left.replace('px', ''));
+    var rocket_top = parseInt(window.getComputedStyle(rocket).top.replace('px', ''));
+
+    for(var i = 0; i < turrets.length; i++){
+        var turret_left = parseInt(window.getComputedStyle(turrets[i]).left.replace('px', ''));
+        var turret_right = turret_left + parseInt(window.getComputedStyle(turrets[i]).width.replace('px', ''));
+        var turret_top = parseInt(window.getComputedStyle(turrets[i]).top.replace('px', ''));
+        var turret_bottom = turret_top + parseInt(window.getComputedStyle(turrets[i]).top.replace('px', ''));
+
+        if(turret_left <= rocket_left && rocket_left <= turret_right && turret_top <= rocket_top && rocket_top <= turret_bottom){
+            return i;
+        }
+    }
+    return undefined;
+}
