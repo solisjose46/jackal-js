@@ -238,6 +238,7 @@ function shootRocket(){
         
         var collision = withinRange(rocketX, rocketY, flight_path);
         var collision_time;
+
         if(flight_path == 'north' || flight_path == 'south'){
             collision_time = Math.floor(((INTERVAL_TIME/intervalY) * collision.distanceY));
         }
@@ -284,11 +285,15 @@ function shootRocket(){
                 stage.appendChild(explosion);
                 setTimeout(()=>{
                     if(collision.status == true){
+                        console.log('BOOM!');
                         var turret = document.getElementsByClassName('turret')[collision.index];
                         console.log('destroyed ' + turret.style.left + ' ' + turret.style.top);
                         console.log('character ' + window.getComputedStyle(character_container).left + ' ' + window.getComputedStyle(character_container).top);
-                        console.log('Y: ' + collision.distanceY);
+                        //console.log('Y: ' + collision.distanceY);
                         turret.remove();
+                    }
+                    else{
+                        console.log('miss');
                     }
                     explosion.remove();
                     character.rocketStatus = false;
@@ -347,26 +352,63 @@ function withinRange(rocketX, rocketY, direction){
                 continue;
             }
             else{
-                distanceY = 0;
+                // console.log('----------------------------');
+                // console.log('direction: ' + direction);
+                // console.log('character left: ' + character_left);
+                // console.log('turret left: ' + turret_left);
+                // console.log('turret top ' + turret_top);
+                // console.log('character top: ' + character_top);
+                // console.log('this turret: ' + i);
+                // console.log('----------------------------');
+
+                differenceY = 0;
+
                 if(direction == 'west'){
-                    distanceX = character_left - turret_left;
+                    differenceX = character_left - turret_left;
                 }
                 else{
-                    distanceX = turret_left - character_left;
+                    differenceX = turret_left - character_left;
                 }
-                console.log('--------------------');
-                console.log('diffx: ' + distanceX);
-                console.log('rocketx: ' + rocketX);
-                console.log('turrtop: ' + turret_top);
-                console.log('chartop: ' + character_top);
-                console.log('turrbottom: ' + turret_bottom);
-                if(true){
-                    //turret_top <= character_top && character_top <= turret_bottom && rocketX > differenceX ughhh
-                    console.log('turret ' + i);
+                if((turret_top <= character_top && character_top <= turret_bottom) && rocketX > differenceX){
+                    console.log('hit!');
                     index = i;
                     toReturn.distanceX = differenceX;
                     break;
                 }
+            }
+        }
+        else{
+            var nw_bool = (direction == 'north-west' && !(character_left > turret_left && character_top > turret_top));
+            var ne_bool = (direction == 'north-east' && !(character_left < turret_left && character_top > turret_top));
+            var sw_bool = (direction == 'south-west' && !(character_left > turret_left && character_top < turret_top));
+            var se_bool = (direction == 'south-east' && !(character_left < turret_left && character_top < turret_top));
+            if(nw_bool || ne_bool || sw_bool || se_bool){
+                continue;
+            }
+            if(direction == 'north-west' || direction == 'north-east'){
+                differenceY = character_top - turret_top;
+                if(direction == 'north-west'){
+                    differenceX = character_left - turret_left;
+                }
+                else{
+                    differenceX = turret_left - character_left;
+                }
+            }
+            else{
+                differenceY = turret_top - character_top;
+                if(direction == 'south-west'){
+                    differenceX = character_left - turret_left;
+                }
+                else{
+                    differenceX = turret_left - character_left;
+                }
+            }
+            if(rocketX > differenceX && rocketY > differenceY){
+                console.log('hit!');
+                index = i;
+                toReturn.distanceX = differenceX;
+                toReturn.distanceY = differenceY;
+                break;
             }
         }
     }
@@ -374,6 +416,9 @@ function withinRange(rocketX, rocketY, direction){
     if(typeof index != 'undefined'){
         toReturn.status = true;
         toReturn.index = index;
+    }
+    else{
+        console.log('undefined');
     }
 
     return toReturn;
