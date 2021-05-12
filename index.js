@@ -106,8 +106,7 @@ function moveX(dir){
         left: 0
     }
 
-    //var SPEED_LIMIT = 5;
-    var SPEED_LIMIT = 20; //temp
+    var SPEED_LIMIT = 5;
     
     if(dir == 'east'){
         if(num_character_style < BOUNDS.right){
@@ -139,8 +138,7 @@ function moveY(dir){
         character_top: 0
     }
 
-    //var SPEED_LIMIT = 5;
-    var SPEED_LIMIT = 20; //temp
+    var SPEED_LIMIT = 5;
 
     if(dir == 'north'){
         if(num_character_style > BOUNDS.character_center_top){
@@ -188,7 +186,6 @@ function moveY(dir){
     }
 }
 //----main character shooting
-//need faster rocket and longer range
 function shootRocket(){
     if(!character.rocketStatus){
         var rocket = document.createElement('DIV');
@@ -205,53 +202,73 @@ function shootRocket(){
         rocket.style.position = 'absolute';
 
         var num_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
-        var num_top = Math.abs(parseInt(window.getComputedStyle(stage).top.replace('px', ''))) + parseInt(window.getComputedStyle(view).top.replace('px', '')) + parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
+        var num_top = getCharacterOnStagePosition();
 
         rocket.style.left = num_left + 'px';
         rocket.style.top = num_top + 'px';
 
         stage.appendChild(rocket);
 
-        var flight_time = Date.now() + 1100;
-        //var flight_time = Date.now() + 1500;
-        var flight_path = character.position;
-        //var ROCKET_SPEED = 10;
-        var ROCKET_SPEED = 20; //px
+        //----------------wtf-----------------------------------wtf-----------------------------------wtf-----------------------------------wtf-------------------
+        var DURATION = 1000; //ms
         var INTERVAL_TIME = 100; //ms
 
+        var flight_path = character.position;
+        var flight_time;
+        
+        var intervalX; // x axis
+        var intervalY;
+
+        if(flight_path == 'north' || flight_path == 'south'){
+            intervalX = 0;
+            intervalY = 14; //px
+            //intervalY = 25;
+        }
+        else if(flight_path == 'east' || flight_path == 'west'){
+            intervalX = 14; //px
+            intervalY = 0;
+        }
+        else{
+            intervalX = 10; //px
+            intervalY = 10; //px
+        }
+
+        var rocketX = (DURATION/INTERVAL_TIME) * intervalX; //distance traveled in x axis
+        var rocketY = (DURATION/INTERVAL_TIME) * intervalY; //distance traveled in y axis
+        
+        var collision = withinRange(rocketX, rocketY, flight_path);
+        var collision_time;
+        if(flight_path == 'north' || flight_path == 'south'){
+            collision_time = Math.floor(((INTERVAL_TIME/intervalY) * collision.distanceY));
+        }
+        else if(flight_path == 'east' || flight_path == 'west'){
+            collision_time = Math.floor(((INTERVAL_TIME/intervalX) * collision.distanceX));
+        }
+        
+        if(collision.status == true){
+            flight_time = Date.now() + collision_time;
+        }
+        else{
+            flight_time = Date.now() + DURATION;
+        }
+
         var flying = setInterval(()=>{
-            if(flight_path == 'west'){
-                num_left-=ROCKET_SPEED;
+            if(flight_path == 'north'){
+                num_top-=intervalY;
+                rocket.style.top = num_top + 'px';
+            }
+            else if(flight_path == 'south'){
+                num_top+=intervalY;
+                rocket.style.top = num_top + 'px';
+            }
+            else if(flight_path == 'west'){
+                num_left-=intervalX;
                 rocket.style.left = num_left + 'px';
             }
             else if(flight_path == 'east'){
-                num_left+=ROCKET_SPEED;
+                num_left+=intervalX;
                 rocket.style.left = num_left + 'px';
             }
-            else if(flight_path == 'north' || flight_path == 'north-west' || flight_path == 'north-east'){
-                num_top-=ROCKET_SPEED;
-                if(flight_path == 'north-west'){
-                    num_left-=ROCKET_SPEED;
-                }
-                else if(flight_path == 'north-east'){
-                    num_left+=ROCKET_SPEED;
-                }
-                rocket.style.top = num_top + 'px';
-                rocket.style.left = num_left + 'px';
-            }
-            else{
-                num_top+=ROCKET_SPEED;
-                if(flight_path == 'south-west'){
-                    num_left-=ROCKET_SPEED;
-                }
-                else if(flight_path == 'south-east'){
-                    num_left+=ROCKET_SPEED;
-                }
-                rocket.style.top = num_top + 'px';
-                rocket.style.left = num_left + 'px';
-            }
-            //loop to detect hit on enemies
-            var impact = collision();
             if(Date.now() > flight_time){
                 clearInterval(flying);
                 var explosion = document.createElement('DIV');
@@ -265,68 +282,99 @@ function shootRocket(){
                 explosion.style.top = window.getComputedStyle(rocket).top;
                 rocket.remove();
                 stage.appendChild(explosion);
-                //add audio
                 setTimeout(()=>{
+                    if(collision.status == true){
+                        var turret = document.getElementsByClassName('turret')[collision.index];
+                        console.log('destroyed ' + turret.style.left + ' ' + turret.style.top);
+                        console.log('character ' + window.getComputedStyle(character_container).left + ' ' + window.getComputedStyle(character_container).top);
+                        console.log('Y: ' + collision.distanceY);
+                        turret.remove();
+                    }
                     explosion.remove();
+                    character.rocketStatus = false;
                 },500);
-                character.rocketStatus = false;
             }
-            if(impact.status){
-                //use found class position to remove enemy
-                var turret = document.getElementsByClassName('turret')[impact.position];
-                turret.remove();
-                console.log('boom!');
-            }
-            else{
-                console.log('miss');
-            }
-        }, INTERVAL_TIME);
-    }
-}
-//enemies
-function loadEnemies(){
-    for(var i = 0; i < enemies.length; i++){
-        var temp_container = document.createElement('DIV');
-        var temp_img = document.createElement('IMG');
-        temp_img.src = "enemies/turret-s.png";
-        temp_container.appendChild(temp_img);
-        temp_container.classList.add('turret');
-        temp_container.style.left = enemies[i].left;
-        temp_container.style.top = enemies[i].top;
-        stage.appendChild(temp_container);
+        }, INTERVAL_TIME);      
+//----------------wtf-----------------------------------wtf-----------------------------------wtf-----------------------------------wtf-------------------
     }
 }
 
-function collision(){
+function withinRange(rocketX, rocketY, direction){
+
     var toReturn = {
-        status: false,
-        position: null
+        status: false, //did it hit?
+        index: null, //which turret did it hit?
+        distanceX: null,
+        distanceY: null
     };
 
-    var position = findTurret();
-    if(typeof position != 'undefined'){
-        toReturn.status = true;
-        toReturn.position = position;
-    }
-    return toReturn;
-}
-//helper function
-function findTurret(){
     var turrets = Array.from(document.getElementsByClassName('turret'));
+    var character_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
+    var character_top = getCharacterOnStagePosition();
 
-    var rocket = document.getElementById('rocket');
-    var rocket_left = parseInt(window.getComputedStyle(rocket).left.replace('px', ''));
-    var rocket_top = parseInt(window.getComputedStyle(rocket).top.replace('px', ''));
+    var index;
 
     for(var i = 0; i < turrets.length; i++){
         var turret_left = parseInt(window.getComputedStyle(turrets[i]).left.replace('px', ''));
-        var turret_right = turret_left + parseInt(window.getComputedStyle(turrets[i]).width.replace('px', ''));
+        var turret_right = parseInt(window.getComputedStyle(turrets[i]).width.replace('px', '')) + turret_left;
         var turret_top = parseInt(window.getComputedStyle(turrets[i]).top.replace('px', ''));
-        var turret_bottom = turret_top + parseInt(window.getComputedStyle(turrets[i]).top.replace('px', ''));
+        var turret_bottom = parseInt(window.getComputedStyle(turrets[i]).height.replace('px', '')) + turret_top;
 
-        if(turret_left <= rocket_left && rocket_left <= turret_right && turret_top <= rocket_top && rocket_top <= turret_bottom){
-            return i;
+        var differenceX;
+        var differenceY;
+
+        if(direction == 'north' || direction == 'south'){
+            if((direction == 'north' && character_top < turret_top) || (direction == 'south' && character_top > turret_top)){
+                continue;
+            }
+            else{
+                differenceX = 0;
+                if(direction == 'north'){
+                    differenceY = character_top - turret_top;
+                }
+                else{
+                    differenceY = turret_top - character_top;
+                }
+            }
+            if(turret_left <= character_left && character_left <= turret_right && rocketY > differenceY){
+                index = i;
+                toReturn.distanceY = differenceY;
+                break;
+            }
+        }
+        else if(direction == 'west' || direction == 'east'){
+            if((direction == 'west' && character_left < turret_left) || (direction == 'east' && character_left > turret_left)){
+                continue;
+            }
+            else{
+                distanceY = 0;
+                if(direction == 'west'){
+                    distanceX = character_left - turret_left;
+                }
+                else{
+                    distanceX = turret_left - character_left;
+                }
+                console.log('--------------------');
+                console.log('diffx: ' + distanceX);
+                console.log('rocketx: ' + rocketX);
+                console.log('turrtop: ' + turret_top);
+                console.log('chartop: ' + character_top);
+                console.log('turrbottom: ' + turret_bottom);
+                if(true){
+                    //turret_top <= character_top && character_top <= turret_bottom && rocketX > differenceX ughhh
+                    console.log('turret ' + i);
+                    index = i;
+                    toReturn.distanceX = differenceX;
+                    break;
+                }
+            }
         }
     }
-    return undefined;
+
+    if(typeof index != 'undefined'){
+        toReturn.status = true;
+        toReturn.index = index;
+    }
+
+    return toReturn;
 }

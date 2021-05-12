@@ -141,3 +141,21 @@ var enemies = [
         top: '542px'
     }
 ];
+
+//enemies
+function loadEnemies(){
+    for(var i = 0; i < enemies.length; i++){
+        var temp_container = document.createElement('DIV');
+        var temp_img = document.createElement('IMG');
+        temp_img.src = "enemies/turret-s.png";
+        temp_container.appendChild(temp_img);
+        temp_container.classList.add('turret');
+        temp_container.style.left = enemies[i].left;
+        temp_container.style.top = enemies[i].top;
+        stage.appendChild(temp_container);
+    }
+}
+
+function getCharacterOnStagePosition(){
+    return Math.abs(parseInt(window.getComputedStyle(stage).top.replace('px', ''))) + parseInt(window.getComputedStyle(view).top.replace('px', '')) + parseInt(window.getComputedStyle(character_container).top.replace('px', ''));
+}
