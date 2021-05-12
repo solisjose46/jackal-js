@@ -241,9 +241,20 @@ function shootRocket(){
 
         if(flight_path == 'north' || flight_path == 'south'){
             collision_time = Math.floor(((INTERVAL_TIME/intervalY) * collision.distanceY));
+            console.log('time to collide: ' + collision_time);
         }
         else if(flight_path == 'east' || flight_path == 'west'){
             collision_time = Math.floor(((INTERVAL_TIME/intervalX) * collision.distanceX));
+            console.log('time to collide: ' + collision_time);
+        }
+        else{
+            var square = 2;
+            var intervalC = Math.sqrt(Math.floor(Math.pow(intervalX, square) + Math.pow(intervalY, square)));
+            var distanceC = Math.sqrt(Math.floor(Math.pow(collision.distanceX, square) + Math.pow(collision.distanceY, square)));
+            collision_time = Math.floor((INTERVAL_TIME/intervalC) * distanceC);
+            console.log('time to collide: ' + collision_time);
+            console.log('interval c: ' + intervalC);
+            console.log('distance c: ' + distanceC);
         }
         
         if(collision.status == true){
@@ -254,22 +265,32 @@ function shootRocket(){
         }
 
         var flying = setInterval(()=>{
-            if(flight_path == 'north'){
+            if(flight_path == 'north' || flight_path == 'north-east' || flight_path == 'north-west'){
                 num_top-=intervalY;
-                rocket.style.top = num_top + 'px';
+                if(flight_path == 'north-east'){
+                    num_left+=intervalX;
+                }
+                else if(flight_path == 'north-west'){
+                    num_left-=intervalX;
+                }
             }
-            else if(flight_path == 'south'){
+            else if(flight_path == 'south' || flight_path == 'south-east' || flight_path == 'south-west'){
                 num_top+=intervalY;
-                rocket.style.top = num_top + 'px';
+                if(flight_path == 'south-east'){
+                    num_left+=intervalX;
+                }
+                else if(flight_path == 'south-west'){
+                    num_left-=intervalX;
+                }
             }
             else if(flight_path == 'west'){
                 num_left-=intervalX;
-                rocket.style.left = num_left + 'px';
             }
             else if(flight_path == 'east'){
                 num_left+=intervalX;
-                rocket.style.left = num_left + 'px';
             }
+            rocket.style.top = num_top + 'px';
+            rocket.style.left = num_left + 'px';
             if(Date.now() > flight_time){
                 clearInterval(flying);
                 var explosion = document.createElement('DIV');
@@ -289,7 +310,6 @@ function shootRocket(){
                         var turret = document.getElementsByClassName('turret')[collision.index];
                         console.log('destroyed ' + turret.style.left + ' ' + turret.style.top);
                         console.log('character ' + window.getComputedStyle(character_container).left + ' ' + window.getComputedStyle(character_container).top);
-                        //console.log('Y: ' + collision.distanceY);
                         turret.remove();
                     }
                     else{
@@ -352,15 +372,6 @@ function withinRange(rocketX, rocketY, direction){
                 continue;
             }
             else{
-                // console.log('----------------------------');
-                // console.log('direction: ' + direction);
-                // console.log('character left: ' + character_left);
-                // console.log('turret left: ' + turret_left);
-                // console.log('turret top ' + turret_top);
-                // console.log('character top: ' + character_top);
-                // console.log('this turret: ' + i);
-                // console.log('----------------------------');
-
                 differenceY = 0;
 
                 if(direction == 'west'){
