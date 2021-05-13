@@ -490,8 +490,11 @@ function enemyRotate(index){
     else{
         new_direction = 'east';
     }
+    var position = enemy_lib.indexOf(enemy_lib.find(({direction}) => direction === new_direction));
+    turret.firstChild.src = enemy_lib[position].img;
 
     console.log('turret: ' + index + ' dir: ' + new_direction);
+
 }
 
 function enemyWithinView(enemyY){

@@ -79,6 +79,41 @@ var rocket_lib = [
     }
 ];
 
+var enemy_lib = [
+    {
+        direction: 'south-west',
+        img: 'enemies/turret-sw.png'
+    },
+    {
+        direction: 'west',
+        img: 'enemies/turret-w.png'
+    },
+    {
+        direction: 'north-west',
+        img: 'enemies/turret-nw.png'
+    },
+    {
+        direction: 'north',
+        img: 'enemies/turret-n.png'
+    },
+    {
+        direction: 'north-east',
+        img: 'enemies/turret-ne.png'
+    },
+    {
+        direction: 'east',
+        img: 'enemies/turret-e.png'
+    },
+    {
+        direction: 'south-east',
+        img: 'enemies/turret-se.png'
+    },
+    {
+        direction: 'south',
+        img: 'enemies/turret-s.png'
+    }
+];
+
 var enemies = [
     {
         left: '97px',
