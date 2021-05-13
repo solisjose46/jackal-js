@@ -209,7 +209,6 @@ function shootRocket(){
 
         stage.appendChild(rocket);
 
-        //----------------wtf-----------------------------------wtf-----------------------------------wtf-----------------------------------wtf-------------------
         var DURATION = 1000; //ms
         var INTERVAL_TIME = 100; //ms
 
@@ -319,8 +318,7 @@ function shootRocket(){
                     character.rocketStatus = false;
                 },500);
             }
-        }, INTERVAL_TIME);      
-//----------------wtf-----------------------------------wtf-----------------------------------wtf-----------------------------------wtf-------------------
+        }, INTERVAL_TIME);
     }
 }
 
@@ -433,4 +431,71 @@ function withinRange(rocketX, rocketY, direction){
     }
 
     return toReturn;
+}
+//enemy direction and shooting behavior
+
+var enemy_interval = 100;
+
+setInterval(() => {
+    enemyShooting();
+}, enemy_interval);
+
+function enemyShooting(){
+    var turrets = Array.from(document.getElementsByClassName('turret'));
+
+    for(var i = 0; i < turrets.length; i++){
+        var turret = turrets[i];
+        var turret_top = parseInt(window.getComputedStyle(turret).top.replace('px', ''));
+        if(enemyWithinView(turret_top)){
+            //if not in proper direction,rotate into proper position
+            enemyRotate(i);
+            //shoot
+        }
+    }
+}
+
+function enemyRotate(index){
+    var turrets = Array.from(document.getElementsByClassName('turret'));
+    var turret = turrets[index];
+    var turret_left = parseInt(window.getComputedStyle(turret).left.replace('px', ''));
+    var turret_right = parseInt(window.getComputedStyle(turret).width.replace('px', '')) + turret_left;
+    var turret_top = parseInt(window.getComputedStyle(turret).top.replace('px', ''));
+    var turret_bottom = parseInt(window.getComputedStyle(turret).height.replace('px', '')) + turret_top;
+    var character_top = getCharacterOnStagePosition();
+    var character_left = parseInt(window.getComputedStyle(character_container).left.replace('px', ''));
+
+    var new_direction;
+
+    if(character_left < turret_left && character_top < turret_top){
+        new_direction = 'north-west';
+    }
+    else if(character_left > turret_right && character_top < turret_top){
+        new_direction = 'north-east';
+    }
+    else if(character_left < turret_left && character_top > turret_bottom){
+        new_direction = 'south-west';
+    }
+    else if(character_left > turret_right && character_top > turret_bottom){
+        new_direction = 'south-east';
+    }
+    else if(turret_left < character_left && character_left < turret_right && character_top < turret_top){
+        new_direction = 'north';
+    }
+    else if(turret_left < character_left && character_left < turret_right && character_top > turret_bottom){
+        new_direction = 'south';
+    }
+    else if(character_top > turret_top && character_top < turret_bottom && character_left < turret_left){
+        new_direction = 'west';
+    }
+    else{
+        new_direction = 'east';
+    }
+
+    console.log('turret: ' + index + ' dir: ' + new_direction);
+}
+
+function enemyWithinView(enemyY){
+    var view_top_bound = Math.abs(parseInt(window.getComputedStyle(stage).top.replace('px', ''))) + parseInt(window.getComputedStyle(view).top.replace('px', ''));
+    var view_bottom_bound = view_top_bound + parseInt(window.getComputedStyle(view).height.replace('px', ''));
+    return (view_top_bound <= enemyY && enemyY <= view_bottom_bound);
 }

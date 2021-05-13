@@ -22,7 +22,7 @@
     height: 100px;
     position: absolute;
     top: 200px;
-    border: red solid 2px;
+    /* border: red solid 2px; */
 }
 #character-container{
     width: 20px;
@@ -30,13 +30,13 @@
     position: absolute;
     top: 40px;
     left: 90px;
-    border: blue solid 2px;
+    /* border: blue solid 2px; */
 }
 .turret{
     height: 30px;
     width: 30px;
     position: absolute;
-    background-color: red;
+    /* background-color: red; */
 }
 #door{
     height: 32px;
@@ -44,7 +44,7 @@
     position: absolute;
     top: 2111px;
     left: 312px;
-    /* display: none; */
+    display: none;
 }
 #pad{
     height: 100px;

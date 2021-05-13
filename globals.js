@@ -147,7 +147,8 @@ function loadEnemies(){
     for(var i = 0; i < enemies.length; i++){
         var temp_container = document.createElement('DIV');
         var temp_img = document.createElement('IMG');
-        temp_img.src = "enemies/turret-s.png";
+        temp_img.src = 'enemies/turret-s.png';
+        //temp_img.alt = 'south';
         temp_container.appendChild(temp_img);
         temp_container.classList.add('turret');
         temp_container.style.left = enemies[i].left;
