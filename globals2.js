@@ -80,12 +80,22 @@ function loadObstacles(){
         arr = toLoad[j];
         for(var i = 0; i < arr.length; i++){
             var temp_container = document.createElement('DIV');
+            var left = arr[i].left;
+            var top = arr[i].top;
             if(j == 0){
                 temp_container.style.height = arr[i].height;
                 temp_container.style.width = arr[i].width;
                 temp_container.className = 'nonremovables';
             }
             else{
+                var rangeSquare = document.createElement('DIV');
+                var Xbuffer = 100;
+                var Ybuffer = 100;
+                rangeSquare.className('rangeSquares');
+                left = parseInt(left.replace('px', ''));
+                top = parseInt(top.replace('px', ''));
+                rangeSquare.style.left = (left - Xbuffer) + 'px';
+                rangeSquare.style.top = (top - Ybuffer) + 'px';
                 var temp_img = document.createElement('IMG');
                 temp_img.src = 'enemies/turret-s.png'; //default position
                 temp_img.className = 'south';
@@ -99,6 +109,8 @@ function loadObstacles(){
             game.appendChild(temp_container);
         }
     }
+    //load range squares
+    //makeRangeSquares();
 }
 function loadPolyPoints(){
     for(var i = 0; i < bounds.length; i++){
@@ -219,3 +231,18 @@ function contains(object) {
     }
 }
 //-------------driver functions-------------
+//enemy helper functions
+// function makeRangeSquares(){
+//     var turrets = Array.from(document.getElementsByClassName('turrets'));
+//     var turret;
+//     var Xbuffer = 100;
+//     var Ybuffer = 100;
+//     for(var i = 0; i < turrets.length; i++){
+//         turret = getDimensions(turrets[i]);
+//         var rangeSquare = document.createElement('DIV');
+//         rangeSquare.className = 'rangeSquares';
+//         rangeSquare.style.left = (turret.left - Xbuffer) + 'px';
+//         rangeSquare.style.top = (turret.top - Ybuffer) + 'px';
+//         game.append(rangeSquare);
+//     }
+// }

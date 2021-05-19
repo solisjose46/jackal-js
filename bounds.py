@@ -4,8 +4,6 @@
 
 f = open("bounds_format.txt", "a")
 
-
-
 with open("bounds.txt", "r") as filestream:
     for line in filestream:
         currentline = line.split(", ")
