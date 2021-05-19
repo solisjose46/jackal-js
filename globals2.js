@@ -180,7 +180,9 @@ function rotate(object, direction){
         }
         object.firstChild.className = library[position].direction;
         object.firstChild.src = library[position].img;
+        return false;
     }
+    return true;
 }
 //checks if point is in polygon (object in map)
 function contains(object) {

@@ -5,6 +5,7 @@ var map = {};
 onkeydown = onkeyup = function(e){
     e = e || event;
     map[e.key] = e.type == 'keydown';
+    e.preventDefault();
     if(map['w'] && map['d']){
         characterMovement('north-east');
     }
@@ -30,8 +31,7 @@ onkeydown = onkeyup = function(e){
         characterMovement('west');
     }
     if(map[' ']){
-        //shootSquare(character);
-        //continue here
+        shootSquare(character);
     }
 }
 //------movement-----
@@ -39,7 +39,7 @@ onkeydown = onkeyup = function(e){
 function characterMovement(direction){
     //rate at which this object will move
     var speedLimit = 10;
-    //make clone and move: if not in bounds do not move character else rotate and move character
+    //make clone and move it: if not in bounds do not move character else rotate and move character
     var characterClone = character.cloneNode(false);
     game.appendChild(characterClone);
     moveObject(characterClone, direction, speedLimit);
@@ -83,15 +83,15 @@ function shootSquare(object){
     if(object.id == 'character-container'){
         var index = tankLibrary.indexOf(tankLibrary.find(({direction}) => direction === object.firstChild.className));
         projectileImg.src = rocketLibrary[index].img;
-        projectile.className = object.firstChild.className;
     }
     else{
         projectileImg.src = 'assets/weapons/projectile.png';
     }
-    
     projectile.appendChild(projectileImg);
+    //console.log(projectileImg);
+    console.log(projectile);
     game.appendChild(projectile);
-    projectileMovement(projectile);
+    projectileMovement(projectile, object.firstChild.className);
 }
 function makeProjectile(left, top){
     var projectile = document.createElement('DIV');
@@ -100,20 +100,21 @@ function makeProjectile(left, top){
     projectile.style.top = top + 'px';
     return projectile;
 }
-function projectileMovement(projectile){
+function projectileMovement(projectile, direction){
     var intervalTime = 100;
     var flightTime = 1100;
     var minTime = Date.now() + flightTime; 
     var speedLimit = 20;
     var projectileCollision;
     var projectileInterval = setInterval(()=>{
-        moveObject(projectile, projectile.firstChild.className, speedLimit);
+        moveObject(projectile, direction, speedLimit);
         projectileCollision = objectCollisions(projectile);
         if(Date.now() > minTime || projectileCollision.status){
             if(projectileCollision.status && projectileCollision.removeable){
                 removeObstacle(projectileCollision.index);
             }
             clearInterval(projectileInterval);
+            projectileExplosion(projectile.style.left, projectile.style.top);
             projectile.remove();
         }
     }, intervalTime);
@@ -121,4 +122,94 @@ function projectileMovement(projectile){
 function removeObstacle(index){
     var removeables = Array.from(document.getElementsByClassName('removeables'));
     removeables[index].remove();
+}
+function projectileExplosion(left, top){
+    var explosion = document.createElement('DIV');
+    var explosion_img = document.createElement('IMG');
+    explosion_img.src = 'assets/environment/explosions/explosion.gif'
+    explosion.style.left = left;
+    explosion.style.top = top;
+    explosion.className = 'explosion';
+    explosion.appendChild(explosion_img);
+    game.appendChild(explosion);
+    var explosionTime = 500;
+    setInterval(()=>{
+        explosion.remove();
+    }, explosionTime);   
+}
+//enemy behavior
+var enemyInterval = 100;
+
+setInterval(() => {
+    enemyShooting();
+}, enemyInterval);
+
+function enemyShooting(){
+    var turrets = Array.from(document.getElementsByClassName('turrets'));
+    var turret;
+    for(var i = 0; i < turrets.length; i++){
+        turret = turrets[i];
+        if(withinRange(turret)){
+            //console.log('b4 rotate');
+            //enemyRotate(i);
+            //enemyShoot(i)
+        }
+    }
+}
+function withinRange(turret){
+    console.log(turret);
+    return;
+    //var turretDimensions = getDimensions(turret);
+    //var characterDimensions = getDimensions(character);
+
+    var leftMin = 110;
+    var topMin = 230;
+
+    if(turretDimensions.left + leftMin >= characterDimensions.left && turretDimensions.top + topMin >= characterDimensions.top){
+        console.log('withinRange!');
+        return true;
+    }
+    return false;
+}
+function enemyRotate(index){
+    var turret = Array.from(document.getElementsByClassName('turret'))[index];
+    var direction = turretPostion(turret);
+    var result;
+    var rotationTime = 100;
+    var timedRotation = setInterval(()=>{
+        result = rotate(turret, direction);
+        if(!result){
+            clearInterval(timedRotation);
+        }
+    }, rotationTime);
+}
+function turretPostion(turret){
+    var turretDim = getDimensions(turret);
+    var characterDim = getDimensions(character);
+    var direction;
+    if(characterDim.left < turretDim.left && characterDim.top < turretDim.top){
+        direction = 'north-west';
+    }
+    else if(characterDim.left > turretDim.right && characterDim.top < turretDim.top){
+        direction = 'north-east';
+    }
+    else if(characterDim.left < turretDim.left && characterDim.top > turretDim.bottom){
+        direction = 'south-west';
+    }
+    else if(characterDim.left > turretDim.right && characterDim.top > turretDim.top){
+        direction = 'south-east';
+    }
+    else if(turretDim.left < characterDim.left && characterDim.left < turretDim.right && characterDim.top < turretDim.top){
+        direction = 'north';
+    }
+    else if(turretDim.left < characterDim.left && characterDim.left < turretDim.right && characterDim.top > turretDim.top){
+        direction = 'south';
+    }
+    else if(characterDim.top > turretDim.top && characterDim.top < turretDim.bottom && characterDim.left < turretDim.left){
+        direction = 'west';
+    }
+    else{
+        direction = 'east';
+    }
+    return direction;
 }
