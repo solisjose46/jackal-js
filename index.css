@@ -2,54 +2,44 @@
     padding: 0;
     margin: 0;
 }
-#game-container, #stage, #character-view, #game-title{
-    width: 510px;
-}
-#game-title{
-    height: 60px;
-}
 #game-container{
-    height: 300px;
-    overflow: hidden;
     position: relative;
+    height: 2872px;
+    width: 512px;
 }
-#stage {
-    height: 2870px;
+#game-container, #stage, .mapObjects{
+    display: block;
+}
+#stage, .mapObjects{
     position: absolute;
-    top: -2570px;
 }
-#character-view{
+/* #pad{
     height: 100px;
-    position: absolute;
-    top: 200px;
-    /* border: red solid 2px; */
-}
-#character-container{
-    width: 20px;
-    height: 25px;
-    position: absolute;
-    top: 40px;
-    left: 90px;
-    /* border: blue solid 2px; */
-}
-.turret{
-    height: 30px;
-    width: 30px;
-    position: absolute;
-    /* background-color: red; */
+    width: 130px;
+    top: 510px;
+    left: 190px;
 }
 #door{
     height: 32px;
     width: 80px;
-    position: absolute;
     top: 2111px;
     left: 312px;
     display: none;
 }
-#pad{
-    height: 100px;
-    width: 130px;
+#character-container{
+    height: 30px;
+    width: 30px;
+    left: 50%;
+    top: 95%;
+} */
+/* for testing */
+/* #door, #pad{
+    display: none;
+} */
+/* .poly{
     position: absolute;
-    top: 510px;
-    left: 190px;
-}
+    display: block;
+    height: 10px;
+    width: 10px;
+    background-color: blueviolet;
+} */

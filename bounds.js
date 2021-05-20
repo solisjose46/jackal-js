@@ -499,194 +499,352 @@ var bounds = [
         y: 2872
     }    
 ];
-var nonRemovables = [
+//1: character, 2: door, 3: pad, 4-18: turrets, 19-49: nonremovables
+var objects = [
     {
-        height: '30px',
-        width: '40px',
-        left: '160px',
-        top: '95px'
+        height: 30,
+        width: 30,
+        left: 256,
+        top: 2728
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '222px',
-        top: '126px'
+        height: 32,
+        width: 80,
+        left: 312,
+        top: 2111
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '350px',
-        top: '126px'
+        height: 100,
+        width: 130,
+        left: 190,
+        top: 510
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '320px',
-        top: '157px'
+        height: 230,
+        width: 230,
+        left: 97,
+        top: 2495
+    
     },
     {
-        height: '67px',
-        width: '67px',
-        left: '384px',
-        top: '510px'
+        height: 230,
+        width: 230,
+        left: 191,
+        top: 2351
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '166px',
-        top: '965px'
+        height: 230,
+        width: 230,
+        left: 95,
+        top: 2191
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '132px',
-        top: '1029px'
+        height: 230,
+        width: 230,
+        left: 255,
+        top: 2191
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '319px',
-        top: '1020px'
+        height: 230,
+        width: 230,
+        left: 353,
+        top: 2191
+    
     },
     {
-        height: '25px',
-        width: '161px',
-        left: '190px',
-        top: '1160px'
+        height: 230,
+        width: 230,
+        left: 193,
+        top: 1119
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '125px',
-        top: '1160px'
+        height: 230,
+        width: 230,
+        left: 256,
+        top: 119
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '310px',
-        top: '1160px'
+        height: 230,
+        width: 230,
+        left: 65,
+        top: 911
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '287px',
-        top: '1230px'
+        height: 230,
+        width: 230,
+        left: 255,
+        top: 911
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '255px',
-        top: '1263px'
+        height: 230,
+        width: 230,
+        left: 289,
+        top: 879
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '157px',
-        top: '1263px'
+        height: 230,
+        width: 230,
+        left: 319,
+        top: 845
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '128px',
-        top: '1302px'
+        height: 230,
+        width: 230,
+        left: 191,
+        top: 637
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '192px',
-        top: '1359px'
+        height: 230,
+        width: 230,
+        left: 320,
+        top: 637
+    
     },
     {
-        height: '72px',
-        width: '73px',
-        left: '65px',
-        top: '1328px'
+        height: 230,
+        width: 230,
+        left: 384,
+        top: 637
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '37px',
-        top: '1476px'
+        height: 230,
+        width: 230,
+        left: 128,
+        top: 542
+    
     },
     {
-        height: '37px',
-        width: '70px',
-        left: '65px',
-        top: '1533px'
+        height: 30,
+        width: 40,
+        left: 160,
+        top: 95
+    
     },
     {
-        height: '37px',
-        width: '70px',
-        left: '65px',
-        top: '2287px'
+        height: 30,
+        width: 40,
+        left: 222,
+        top: 126
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '129px',
-        top: '2320px'
+        height: 30,
+        width: 40,
+        left: 350,
+        top: 126
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '357px',
-        top: '2261px'
+        height: 30,
+        width: 40,
+        left: 320,
+        top: 157
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '294px',
-        top: '2293px'
+        height: 67,
+        width: 67,
+        left: 384,
+        top: 510
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '161px',
-        top: '2432px'
+        height: 30,
+        width: 40,
+        left: 166,
+        top: 965
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '193px',
-        top: '2465px'
+        height: 30,
+        width: 40,
+        left: 132,
+        top: 1029
+    
     },
     {
-        height: '74px',
-        width: '74px',
-        left: '319px',
-        top: '2431px'
+        height: 30,
+        width: 40,
+        left: 319,
+        top: 1020
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '164px',
-        top: '2566px'
+        height: 25,
+        width: 161,
+        left: 190,
+        top: 1160
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '288px',
-        top: '2596px'
+        height: 30,
+        width: 40,
+        left: 125,
+        top: 1160
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '255px',
-        top: '2671px'
+        height: 30,
+        width: 40,
+        left: 310,
+        top: 1160
+    
     },
     {
-        height: '40px',
-        width: '65px',
-        left: '289px',
-        top: '2704px'
+        height: 30,
+        width: 40,
+        left: 287,
+        top: 1230
+    
     },
     {
-        height: '30px',
-        width: '40px',
-        left: '293px',
-        top: '2804px'
+        height: 30,
+        width: 40,
+        left: 255,
+        top: 1263
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 157,
+        top: 1263
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 128,
+        top: 1302
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 192,
+        top: 1359
+    
+    },
+    {
+        height: 72,
+        width: 73,
+        left: 65,
+        top: 1328
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 37,
+        top: 1476
+    
+    },
+    {
+        height: 37,
+        width: 70,
+        left: 65,
+        top: 1533
+    
+    },
+    {
+        height: 37,
+        width: 70,
+        left: 65,
+        top: 2287
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 129,
+        top: 2320
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 357,
+        top: 2261
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 294,
+        top: 2293
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 161,
+        top: 2432
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 193,
+        top: 2465
+    
+    },
+    {
+        height: 74,
+        width: 74,
+        left: 319,
+        top: 2431
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 164,
+        top: 2566
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 288,
+        top: 2596
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 255,
+        top: 2671
+    
+    },
+    {
+        height: 40,
+        width: 65,
+        left: 289,
+        top: 2704
+    
+    },
+    {
+        height: 30,
+        width: 40,
+        left: 293,
+        top: 2804
     }    
 ];
+
 var tankLibrary = [
     {
         direction: 'south-west',
@@ -789,68 +947,5 @@ var turretLibrary = [
     {
         direction: 'south',
         img: 'enemies/turret-s.png'
-    }
-];
-
-var turretLocations = [
-    {
-        left: '97px',
-        top: '2495px'
-    },
-    {
-        left: '191px',
-        top: '2351px'
-    },
-    {
-        left: '95px',
-        top: '2191px'
-    },
-    {
-        left: '255px',
-        top: '2191px'
-    },
-    {
-        left: '353px',
-        top: '2191px'
-    },
-    {
-        left: '193px',
-        top: '1119px'
-    },
-    {
-        left: '256px',
-        top: '1119px'
-    },
-    {
-        left: '65px',
-        top: '911px'
-    },
-    {
-        left: '255px',
-        top: '911px'
-    },
-    {
-        left: '289px',
-        top: '879px'
-    },
-    {
-        left: '319px',
-        top: '845px'
-    },
-    {
-        left: '191px',
-        top: '637px'
-    },
-    {
-        left: '320px',
-        top: '637px'
-    },
-    {
-        left: '384px',
-        top: '637px'
-    },
-    {
-        left: '128px',
-        top: '542px'
     }
 ];
