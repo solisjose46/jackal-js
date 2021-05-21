@@ -1,18 +1,18 @@
 //constructor(html, image, role, direction, speedLimit, library)
-var temp = document.createElement('DIV');
-temp.className = 'mapObjects';
-var tempImg = document.createElement('IMG');
-tempImg.src = 'tanks/blue-n.png'
-temp.appendChild(tempImg);
-temp.style.height = '30px';
-temp.style.width = '30px';
-temp.style.top = '2500px';
-temp.style.left = '150px';
-game.appendChild(temp);
-var role = 'character';
-var direction = 'north';
-var speedLimit = 10;
-var player = new Player(temp, tempImg, role, direction, speedLimit, tankLibrary);
+// var temp = document.createElement('DIV');
+// temp.className = 'mapObjects';
+// var tempImg = document.createElement('IMG');
+// tempImg.src = 'tanks/blue-n.png'
+// temp.appendChild(tempImg);
+// temp.style.height = '30px';
+// temp.style.width = '30px';
+// temp.style.top = '2500px';
+// temp.style.left = '150px';
+// game.appendChild(temp);
+// var role = 'character';
+// var direction = 'north';
+// var speedLimit = 10;
+// var player = new Player(temp, tempImg, role, direction, speedLimit, tankLibrary);
 
 
 //key handler
