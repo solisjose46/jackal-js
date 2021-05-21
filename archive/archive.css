@@ -1,0 +1,134 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+#game-container, #stage, #character-view, #game-title{
+    width: 510px;
+}
+#game-title{
+    height: 60px;
+}
+#game-container{
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+}
+#stage {
+    height: 2870px;
+    position: absolute;
+    top: -2570px;
+}
+#character-view{
+    height: 100px;
+    position: absolute;
+    top: 200px;
+    /* border: red solid 2px; */
+}
+#character-container{
+    width: 20px;
+    height: 25px;
+    position: absolute;
+    top: 40px;
+    left: 90px;
+    /* border: blue solid 2px; */
+}
+.turret{
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    /* background-color: red; */
+}
+#door{
+    height: 32px;
+    width: 80px;
+    position: absolute;
+    top: 2111px;
+    left: 312px;
+    display: none;
+}
+#pad{
+    height: 100px;
+    width: 130px;
+    position: absolute;
+    top: 510px;
+    left: 190px;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+}
+#game-container{
+    position: relative;
+    height: 2872px;
+    width: 512px;
+}
+#game-container, #stage, #pad, #door, #character-container{
+    display: block;
+}
+#door, #pad, #character-container, #stage{
+    position: absolute;
+}
+#pad{
+    height: 100px;
+    width: 130px;
+    top: 510px;
+    left: 190px;
+}
+#door{
+    height: 32px;
+    width: 80px;
+    top: 2111px;
+    left: 312px;
+    display: none;
+}
+#character-container{
+    height: 30px;
+    width: 30px;
+    left: 50%;
+    top: 95%;
+}
+.nonremovables{
+    position: absolute;
+    display: block;
+    /* background-color: blueviolet; */
+}
+.turrets{
+    position: absolute;
+    display: block;
+    height: 30px;
+    width: 30px;
+
+}
+.projectile{
+    position: absolute;
+    display: block;
+    height: 10px;
+    width: 10px;
+    /* temp */
+    /* background-color: black; */
+}
+.explosion{
+    position: absolute;
+    display: block;
+    height: 30px;
+    width: 30px;
+}
+.rangeSquares{
+    position: absolute;
+    display: block;
+    height: 230px;
+    width: 230px;
+    border: 2px dotted blue;
+}
+/* for testing */
+/* #door, #pad{
+    display: none;
+} */
+.poly{
+    position: absolute;
+    display: block;
+    height: 10px;
+    width: 10px;
+    /* background-color: blueviolet; */
+}

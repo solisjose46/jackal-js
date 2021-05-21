@@ -1,0 +1,342 @@
+{
+	height: 30,
+	width: 30,
+	left: 256,
+	top: 2728
+
+},
+{
+	height: 32,
+	width: 80,
+	left: 312,
+	top: 2111
+
+},
+{
+	height: 100,
+	width: 130,
+	left: 190,
+	top: 510
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 97,
+	top: 2495
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 191,
+	top: 2351
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 95,
+	top: 2191
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 255,
+	top: 2191
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 353,
+	top: 2191
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 193,
+	top: 1119
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 256,
+	top: 119
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 65,
+	top: 911
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 255,
+	top: 911
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 289,
+	top: 879
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 319,
+	top: 845
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 191,
+	top: 637
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 320,
+	top: 637
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 384,
+	top: 637
+
+},
+{
+	height: 230,
+	width: 230,
+	left: 128,
+	top: 542
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 160,
+	top: 95
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 222,
+	top: 126
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 350,
+	top: 126
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 320,
+	top: 157
+
+},
+{
+	height: 67,
+	width: 67,
+	left: 384,
+	top: 510
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 166,
+	top: 965
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 132,
+	top: 1029
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 319,
+	top: 1020
+
+},
+{
+	height: 25,
+	width: 161,
+	left: 190,
+	top: 1160
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 125,
+	top: 1160
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 310,
+	top: 1160
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 287,
+	top: 1230
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 255,
+	top: 1263
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 157,
+	top: 1263
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 128,
+	top: 1302
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 192,
+	top: 1359
+
+},
+{
+	height: 72,
+	width: 73,
+	left: 65,
+	top: 1328
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 37,
+	top: 1476
+
+},
+{
+	height: 37,
+	width: 70,
+	left: 65,
+	top: 1533
+
+},
+{
+	height: 37,
+	width: 70,
+	left: 65,
+	top: 2287
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 129,
+	top: 2320
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 357,
+	top: 2261
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 294,
+	top: 2293
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 161,
+	top: 2432
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 193,
+	top: 2465
+
+},
+{
+	height: 74,
+	width: 74,
+	left: 319,
+	top: 2431
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 164,
+	top: 2566
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 288,
+	top: 2596
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 255,
+	top: 2671
+
+},
+{
+	height: 40,
+	width: 65,
+	left: 289,
+	top: 2704
+
+},
+{
+	height: 30,
+	width: 40,
+	left: 293,
+	top: 2804
+},
