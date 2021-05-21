@@ -523,106 +523,106 @@ var objects = [
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 97,
         top: 2495
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 191,
         top: 2351
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 95,
         top: 2191
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 255,
         top: 2191
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 353,
         top: 2191
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 193,
         top: 1119
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 256,
         top: 119
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 65,
         top: 911
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 255,
         top: 911
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 289,
         top: 879
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 319,
         top: 845
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 191,
         top: 637
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 320,
         top: 637
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 384,
         top: 637
     
     },
     {
-        height: 230,
-        width: 230,
+        height: 30,
+        width: 30,
         left: 128,
         top: 542
     

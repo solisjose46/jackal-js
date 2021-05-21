@@ -13,33 +13,3 @@
 #stage, .mapObjects{
     position: absolute;
 }
-/* #pad{
-    height: 100px;
-    width: 130px;
-    top: 510px;
-    left: 190px;
-}
-#door{
-    height: 32px;
-    width: 80px;
-    top: 2111px;
-    left: 312px;
-    display: none;
-}
-#character-container{
-    height: 30px;
-    width: 30px;
-    left: 50%;
-    top: 95%;
-} */
-/* for testing */
-/* #door, #pad{
-    display: none;
-} */
-/* .poly{
-    position: absolute;
-    display: block;
-    height: 10px;
-    width: 10px;
-    background-color: blueviolet;
-} */

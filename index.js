@@ -1,14 +1,42 @@
-//window.addEventListener('load', loadObjects());
 var playerObstacles = ['removable', 'turret', 'nonremovable'];
-var turretObstacles = ['player', 'removable', 'nonremovable'];
-var player = new Player(30, 30, 256, 2728, playerObstacles);
-var door = new GameObject(32, 80, 312, 2111, 'assets/environment/infrastructure/broken-door.png', 'removable', null);
-var turret = new Turret(97, 2495, turretObstacles);
-var nonremove = new GameObject(30, 40, 160, 95, '', 'nonremovable', null);
-mapObjects.push(player);
-mapObjects.push(door);
-mapObjects.push(turret);
-mapObjects.push(nonremove);
+var turretObstacles = ['player', 'removable'];
+
+window.addEventListener('load', loadGameObjects());
+
+var player;
+function loadGameObjects(){
+    var gameObject;
+    for(var i = 0; i < objects.length; i++){
+        gameObject = objects[i];
+        var pushObject;
+        if(i == 0){
+            player = new Player(gameObject.height, gameObject.width, gameObject.left, gameObject.top, playerObstacles);
+            pushObject = player;
+        }
+        else if(i == 1){
+            pushObject = new Door(gameObject.height, gameObject.width, gameObject.left, gameObject.top);
+        }
+        else if(i == 2){
+            pushObject = new GameObject(gameObject.height, gameObject.width, gameObject.left, gameObject.top, 'assets/environment/infrastructure/landing-pad.gif', 'none', '');
+        }
+        else if(3 <= i && i <= 17){
+            pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles);
+        }
+        else{
+            pushObject = new GameObject(gameObject.height, gameObject.width, gameObject.left, gameObject.top, '', 'nonremovable', '');
+        }
+        mapObjects.push(pushObject);
+    }
+}
+
+var turretTime = 250;
+setInterval(() => {
+    var turrets = mapObjects.filter(({role}) => role === 'turret');
+    for(var i = 0; i < turrets.length; i++){
+        turrets[i].turretShoot(player);
+    }
+}, turretTime);
+
 //key handler
 var map = {};
 onkeydown = onkeyup = function(e){

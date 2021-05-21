@@ -1,5 +1,5 @@
 var game = document.getElementById('game-container');
-var mapObjects = []; //player, removable, none, turret, nonremovable 
+var mapObjects = [];
 
 class GameObject{
     constructor(height, width, left, top, imageSrc, role, direction){
@@ -7,20 +7,18 @@ class GameObject{
         this.width = width;
         this.left = left;
         this.top = top;
-        this.styleHeight = height + 'px';
-        this.styleWidth = width + 'px';
-        this.styleLeft = left + 'px';
-        this.styleTop = top + 'px';
 
         var div = document.createElement('DIV');
-        var image = document.createElement('IMG');
         div.className = 'mapObjects';
+        var image = document.createElement('IMG');
+        //image.className = 'mapObjects';
         image.src = imageSrc;
         div.appendChild(image);
-        div.style.height = this.styleHeight;
-        div.style.width = this.styleWidth;
-        div.style.left = this.styleLeft;
-        div.style.top = this.styleTop;
+        
+        div.style.height = height + 'px';
+        div.style.width = width + 'px';
+        div.style.left = left + 'px';
+        div.style.top = top + 'px';
         game.appendChild(div);
 
         this.html = div;
@@ -29,21 +27,14 @@ class GameObject{
         this.direction = direction;
     }
     //getters
-    get getStyles(){
-        var toReturn = {
-            width: this.styleWidth,
-            height: this.styleHeight,
-            left: this.styleLeft,
-            top: this.styleTop
-        };
-        return toReturn;
-    }
     get getNums(){
         var toReturn = {
             width: this.width,
             heigth: this.height,
             left: this.left,
-            top: this.height
+            right: this.left + this.width,
+            top: this.top,
+            bottom: this.top + this.height
         };
         return toReturn;
     }
@@ -51,18 +42,16 @@ class GameObject{
         return this.direction;
     }
     get getRole(){
-        return this.rolel
+        return this.role;
     }
     //setter
     setLeft(left){
         this.left = left;
-        this.styleLeft = this.left + 'px';
-        this.html.style.left = this.styleLeft;
+        this.html.style.left = left + 'px';
     }
     setTop(top){
         this.top = top;
-        this.styleTop = this.top + 'px';
-        this.html.style.top = this.styleTop;
+        this.html.style.top = top + 'px';
     }
     changeImage(imageSrc){
         this.image.src = imageSrc;
@@ -103,11 +92,10 @@ class GameObject{
 };
 
 class Projectile extends GameObject{
-    constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles){
+    constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacleRoles){
         super(height, width, left, top, imageSrc, role, direction);
         this.speedLimit = speedLimit;
-        this.obstacleRoles = obstacles; //array of roles to iteract with
-        this.obstacles = this.updateObstacles(); //array of array of objects for projectileCollision
+        this.obstacleRoles = obstacleRoles; //array of roles to iteract with
     }
     //methods
     updateObstacles(){
@@ -154,7 +142,7 @@ class Projectile extends GameObject{
         if(this.inBounds(lng, lat) == 1 && !results.impact){
             this.setLeft(lng);
             this.setTop(lat);
-        }//ol
+        }
         return results;
     }
     projectileCollision(){
@@ -162,9 +150,9 @@ class Projectile extends GameObject{
             impact: false,
             object: null
         };
-        var obstacle;
-        for(var i = 0; i < this.obstacles.length; i++){
-            obstacle = this.obstacles[i];
+        var obstacles = this.updateObstacles();
+        for(var i = 0; i < obstacles.length; i++){
+            var obstacle = obstacles[i];
             for(var j = 0; j < obstacle.length; j++){
                 if(this.collision(this, obstacle[j])){
                     toReturn.impact = true;
@@ -186,8 +174,8 @@ class Projectile extends GameObject{
 };
 
 class Shooter extends Projectile{
-    constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles, library){
-        super(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles);
+    constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacleRoles, library){
+        super(height, width, left, top, imageSrc, role, direction, speedLimit, obstacleRoles);
         this.library = library;
     }
     rotate(direction){
@@ -236,21 +224,19 @@ class Shooter extends Projectile{
         }
     }
     shoot(rocketImage){
-        //constructor(left, top, imageSrc, direction, obstacles)
-        var rocket = new Rocket(this.left, this.top, rocketImage, this.direction, this.obstacleRoles);
+        var rocket = new Rocket(this.left, this.top, rocketImage, this.direction, this.obstacleRoles, this.role);
         rocket.flight();
     }
 };
 
 class Rocket extends Projectile{
-    //constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles)
-    constructor(left, top, imageSrc, direction, obstacles){
-        super(10, 10, left, top, imageSrc, null, direction, 18, obstacles);
+    constructor(left, top, imageSrc, direction, obstacleRoles, shooter){
+        super(10, 10, left, top, imageSrc, null, direction, 18, obstacleRoles);
         this.shooter = shooter;
     }
     flight(){
         var timeInterval = 100; //ms
-        var minTime = Date.now() + 1100;
+        var minTime = Date.now() + 1100;//1.1 seconds
         var flightResults;
         var flightInterval = setInterval(()=>{
             flightResults = this.move();
@@ -262,12 +248,15 @@ class Rocket extends Projectile{
                     }
                     else if((flightResults.object.role == 'turret' || flightResults.object.role == 'removable') && this.shooter == 'player'){
                         if(flightResults.object.role == 'removable'){
-                            flightResults.object.style.display = 'block'; //door display is none
+                            flightResults.object.removeDoor();
                         }
-                        mapObjects.splice(mapObjects.indexOf(flightResults.object)); //remove from
+                        else{
+                            flightResults.object.html.remove();
+                        }
+                        mapObjects.splice(mapObjects.indexOf(flightResults.object));
                     }
-                    this.explode();
                 }
+                this.explode();
             }
         }, timeInterval);
     }
@@ -277,27 +266,86 @@ class Rocket extends Projectile{
         setTimeout(()=>{
             explosion.html.remove();
             explosion = null;
+            this.html.remove();
         }, explosionTime);
     }
 };
 
 class Player extends Shooter{
-    //constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles, library)
-    constructor(height, width, left, top, obstacles){
-        super(height, width, left, top, 'tanks/blue-n.png', 'player', 'north', 12, obstacles, tankLibrary);
+    constructor(height, width, left, top, obstacleRoles){
+        super(height, width, left, top, 'tanks/blue-n.png', 'player', 'north', 12, obstacleRoles, tankLibrary);
     }
     shootRocket(){
-        //pass parameters to shoot
         var rocketImage = rocketLibrary.find(({direction}) => direction === this.direction);
         this.shoot(rocketImage.img);
-        this.obstacles = this.updateObstacles();
     }
 };
 
 class Turret extends Shooter{
-    //constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles, library)
-    constructor(left, top, obstacles){
-        //temp height and width
-        super(30, 30, left, top, 'enemies/turret-s.png', 'turret', 'south', null, obstacles, turretLibrary);
+    constructor(height, width, left, top, obstacleRoles){
+        super(height, width, left, top, 'enemies/turret-s.png', 'turret', 'south', 0, obstacleRoles, turretLibrary);
+        this.rangeSquare = new GameObject(230, 230, (this.left - 100), (this.top - 100), '', 'rangeSquare', null);
+    }
+    rotateTurret(direction){
+        var rotateTime = 150;
+        var rotateInterval = setInterval(() => {
+            if(this.rotate(direction)){
+                clearInterval(rotateInterval);
+            }
+        }, rotateTime);
+    }
+    repositionTurret(player){
+        var direction;
+        var turretNums = this.getNums;
+        var playerNums = player.getNums;
+        if(playerNums.left < turretNums.left && playerNums.top < turretNums.top){
+            direction = 'north-west';
+        }
+        else if(playerNums.left > turretNums.right && playerNums.top < turretNums.top){
+            direction = 'north-east';
+        }
+        else if(playerNums.left < turretNums.left && playerNums.top > turretNums.bottom){
+            direction = 'south-west';
+        }
+        else if(playerNums.left > turretNums.right && playerNums.top > turretNums.top){
+            direction = 'south-east';
+        }
+        else if(turretNums.left < playerNums.left && playerNums.left < turretNums.right && playerNums.top < turretNums.top){
+            direction = 'north';
+        }
+        else if(turretNums.left < playerNums.left && playerNums.left < turretNums.right && playerNums.top > turretNums.top){
+            direction = 'south';
+        }
+        else if(playerNums.top > turretNums.top && playerNums.top < turretNums.bottom && playerNums.left < turretNums.left){
+            direction = 'west';
+        }
+        else{
+            direction = 'east';
+        }
+        return direction;
+    }
+    turretShoot(player){
+        if(this.collision(player, this.rangeSquare)){
+            var newDirection = this.repositionTurret(player);
+            this.rotateTurret(newDirection);
+            setTimeout(() => {
+                this.shootRocket();
+            }, 1000);
+        }
+    }
+    shootRocket(){
+        console.log('shootRocket');
+        var rocketImage = 'assets/weapons/projectile.png';
+        this.shoot(rocketImage);
     }
 };
+
+class Door extends GameObject{
+    constructor(height, width, left, top){
+        super(height, width, left, top, 'assets/environment/infrastructure/broken-door.png', 'removeable', '');
+        this.html.style.display = 'none'; //when hit change to 'block' and remove from mapObejcts (soft delete)
+    }
+    removeDoor(){
+        this.html.style.display = 'block';
+    }
+}
