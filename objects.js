@@ -1,5 +1,5 @@
 var game = document.getElementById('game-container');
-var mapObjects = []; //player, removeable, none, turret, nonremovable 
+var mapObjects = []; //player, removable, none, turret, nonremovable 
 
 class GameObject{
     constructor(height, width, left, top, imageSrc, role, direction){
@@ -103,11 +103,19 @@ class GameObject{
 };
 
 class Projectile extends GameObject{
-    //height, width, left, top, imageSrc, role, direction
     constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles){
         super(height, width, left, top, imageSrc, role, direction);
         this.speedLimit = speedLimit;
-        this.obstacles = obstacles;
+        this.obstacleRoles = obstacles; //array of roles to iteract with
+        this.obstacles = this.updateObstacles(); //array of array of objects for projectileCollision
+    }
+    //methods
+    updateObstacles(){
+        var arr = [];
+        for(var i = 0; i < this.obstacleRoles.length; i++){
+            arr[i] = mapObjects.filter(({role}) => role === this.obstacleRoles[i]);
+        }
+        return arr;
     }
     moveX(){
         var newLeft;
@@ -142,25 +150,27 @@ class Projectile extends GameObject{
             lat = this.moveY();
             
         }
-        var results = projectileCollision();
+        var results = this.projectileCollision();
         if(this.inBounds(lng, lat) == 1 && !results.impact){
             this.setLeft(lng);
             this.setTop(lat);
-        }
+        }//ol
         return results;
     }
     projectileCollision(){
         var toReturn = {
             impact: false,
-            object: null,
-            index: null
+            object: null
         };
         var obstacle;
         for(var i = 0; i < this.obstacles.length; i++){
-            obstacle = obstacles[i];
-            if(this.collision(this, obstacle)){
-                toReturn.object = obstacle.getRole;
-                toReturn.index = i;
+            obstacle = this.obstacles[i];
+            for(var j = 0; j < obstacle.length; j++){
+                if(this.collision(this, obstacle[j])){
+                    toReturn.impact = true;
+                    toReturn.object = obstacle[j];
+                    return toReturn;
+                }
             }
         }
         return toReturn;
@@ -176,7 +186,6 @@ class Projectile extends GameObject{
 };
 
 class Shooter extends Projectile{
-    //height, width, left, top, imageSrc, role, direction, speedLimit, obstacles
     constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles, library){
         super(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles);
         this.library = library;
@@ -227,40 +236,68 @@ class Shooter extends Projectile{
         }
     }
     shoot(rocketImage){
-        // var rocket = new Rocket(rocketImage, this.left, this.top, this.direction, this.role);
-        // rocket.flight(obstacles);
+        //constructor(left, top, imageSrc, direction, obstacles)
+        var rocket = new Rocket(this.left, this.top, rocketImage, this.direction, this.obstacleRoles);
+        rocket.flight();
     }
 };
 
 class Rocket extends Projectile{
-    //height, width, left, top, imageSrc, role, direction, speedLimit, obstacles
-    constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles){
-        super(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles);
+    //constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles)
+    constructor(left, top, imageSrc, direction, obstacles){
+        super(10, 10, left, top, imageSrc, null, direction, 18, obstacles);
+        this.shooter = shooter;
     }
     flight(){
-        
+        var timeInterval = 100; //ms
+        var minTime = Date.now() + 1100;
+        var flightResults;
+        var flightInterval = setInterval(()=>{
+            flightResults = this.move();
+            if(Date.now() > minTime || flightResults.impact){
+                clearInterval(flightInterval);
+                if(flightResults.impact){
+                    if(flightResults.object.role == 'player'){
+                        console.log('player hit');
+                    }
+                    else if((flightResults.object.role == 'turret' || flightResults.object.role == 'removable') && this.shooter == 'player'){
+                        if(flightResults.object.role == 'removable'){
+                            flightResults.object.style.display = 'block'; //door display is none
+                        }
+                        mapObjects.splice(mapObjects.indexOf(flightResults.object)); //remove from
+                    }
+                    this.explode();
+                }
+            }
+        }, timeInterval);
+    }
+    explode(){
+        var explosion = new GameObject(30, 30, this.left, this.top, 'assets/environment/explosions/explosion.gif', null);
+        var explosionTime = 500;
+        setTimeout(()=>{
+            explosion.html.remove();
+            explosion = null;
+        }, explosionTime);
     }
 };
 
-// class Player extends Shooter{
-//     constructor(html, image, role, direction, speedLimit, library){
-//         super(html, image, role, direction, speedLimit, library);
-//     }
-//     shootRocket(){
-//         //left off here!!!
-//         var rocketImage = rocketLibrary.find(({direction}) => direction === this.direction).img;
-//         var obstacles = [];
-//         this.shoot(rocketImage, obstacles);
-//     }
-// };
+class Player extends Shooter{
+    //constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles, library)
+    constructor(height, width, left, top, obstacles){
+        super(height, width, left, top, 'tanks/blue-n.png', 'player', 'north', 12, obstacles, tankLibrary);
+    }
+    shootRocket(){
+        //pass parameters to shoot
+        var rocketImage = rocketLibrary.find(({direction}) => direction === this.direction);
+        this.shoot(rocketImage.img);
+        this.obstacles = this.updateObstacles();
+    }
+};
 
-// // class Turret extends Shooter{
-// //     constructor(html, image, role, direction, speedLimit, library){
-// //         super(html, image, role, direction, speedLimit, library);
-// //     }
-// //     shootRocket(){
-// //         var rocketImage = 'assets/weapons/projectile.png';
-// //         var obstacles = [];
-// //         this.shoot(rocketImage, obstacles);
-// //     }
-// // };
+class Turret extends Shooter{
+    //constructor(height, width, left, top, imageSrc, role, direction, speedLimit, obstacles, library)
+    constructor(left, top, obstacles){
+        //temp height and width
+        super(30, 30, left, top, 'enemies/turret-s.png', 'turret', 'south', null, obstacles, turretLibrary);
+    }
+};

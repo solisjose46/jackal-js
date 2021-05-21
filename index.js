@@ -1,20 +1,14 @@
-//constructor(html, image, role, direction, speedLimit, library)
-// var temp = document.createElement('DIV');
-// temp.className = 'mapObjects';
-// var tempImg = document.createElement('IMG');
-// tempImg.src = 'tanks/blue-n.png'
-// temp.appendChild(tempImg);
-// temp.style.height = '30px';
-// temp.style.width = '30px';
-// temp.style.top = '2500px';
-// temp.style.left = '150px';
-// game.appendChild(temp);
-// var role = 'character';
-// var direction = 'north';
-// var speedLimit = 10;
-// var player = new Player(temp, tempImg, role, direction, speedLimit, tankLibrary);
-
-
+//window.addEventListener('load', loadObjects());
+var playerObstacles = ['removable', 'turret', 'nonremovable'];
+var turretObstacles = ['player', 'removable', 'nonremovable'];
+var player = new Player(30, 30, 256, 2728, playerObstacles);
+var door = new GameObject(32, 80, 312, 2111, 'assets/environment/infrastructure/broken-door.png', 'removable', null);
+var turret = new Turret(97, 2495, turretObstacles);
+var nonremove = new GameObject(30, 40, 160, 95, '', 'nonremovable', null);
+mapObjects.push(player);
+mapObjects.push(door);
+mapObjects.push(turret);
+mapObjects.push(nonremove);
 //key handler
 var map = {};
 onkeydown = onkeyup = function(e){

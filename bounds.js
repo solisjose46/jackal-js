@@ -499,7 +499,7 @@ var bounds = [
         y: 2872
     }    
 ];
-//1: character, 2: door, 3: pad, 4-18: turrets, 19-49: nonremovables
+//1: player, 2: removeable (door), 3: none (pad), 4-18: turret, 19-49: nonremovable
 var objects = [
     {
         height: 30,
