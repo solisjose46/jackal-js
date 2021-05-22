@@ -1,29 +1,39 @@
 var playerObstacles = ['removable', 'turret', 'nonremovable'];
-var turretObstacles = ['player', 'removable'];
+var turretObstacles = ['player', 'nonremovable', 'removable'];
 
 window.addEventListener('load', loadGameObjects());
 
 var player;
+var launchPad;
 function loadGameObjects(){
     var gameObject;
     for(var i = 0; i < objects.length; i++){
         gameObject = objects[i];
         var pushObject;
         if(i == 0){
-            player = new Player(gameObject.height, gameObject.width, gameObject.left, gameObject.top, playerObstacles);
-            pushObject = player;
+            pushObject = new Door(gameObject.height, gameObject.width, gameObject.left, gameObject.top);
+
         }
         else if(i == 1){
-            pushObject = new Door(gameObject.height, gameObject.width, gameObject.left, gameObject.top);
+            pushObject = new Pad(gameObject.height, gameObject.width, gameObject.left, gameObject.top, 'assets/environment/infrastructure/landing-pad.gif', 'none', '');
+            launchPad = pushObject;
         }
-        else if(i == 2){
-            pushObject = new GameObject(gameObject.height, gameObject.width, gameObject.left, gameObject.top, 'assets/environment/infrastructure/landing-pad.gif', 'none', '');
-        }
-        else if(3 <= i && i <= 17){
+        else if(2 <= i && i <= 16){
             pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles);
+            // if(i==7 || i==8){
+            //     pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles.splice(1,1));
+                
+            // }
+            // else{
+            //     pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles);
+            // }
+        }
+        else if(17 <= i && i <= 47){
+            pushObject = new GameObject(gameObject.height, gameObject.width, gameObject.left, gameObject.top, '', 'nonremovable', '');
         }
         else{
-            pushObject = new GameObject(gameObject.height, gameObject.width, gameObject.left, gameObject.top, '', 'nonremovable', '');
+            player = new Player(gameObject.height, gameObject.width, gameObject.left, gameObject.top, playerObstacles);
+            pushObject = player;
         }
         mapObjects.push(pushObject);
     }
@@ -35,6 +45,7 @@ setInterval(() => {
     for(var i = 0; i < turrets.length; i++){
         turrets[i].turretShoot(player);
     }
+    launchPad.victory(player); //checks for victory condition
 }, turretTime);
 
 //key handler

@@ -499,15 +499,8 @@ var bounds = [
         y: 2872
     }    
 ];
-//1: player, 2: removeable (door), 3: none (pad), 4-18: turret, 19-49: nonremovable
+//1: removeable (door), 2: none (pad), 3-17: turret, 18-48: nonremovable, 49: player
 var objects = [
-    {
-        height: 30,
-        width: 30,
-        left: 256,
-        top: 2728
-    
-    },
     {
         height: 32,
         width: 80,
@@ -567,8 +560,8 @@ var objects = [
     {
         height: 30,
         width: 30,
-        left: 256,
-        top: 119
+        left: 255,
+        top: 1119
     
     },
     {
@@ -842,7 +835,14 @@ var objects = [
         width: 40,
         left: 293,
         top: 2804
-    }    
+    },
+    {
+        height: 30,
+        width: 30,
+        left: 256,
+        top: 2728
+    
+    }
 ];
 
 var tankLibrary = [

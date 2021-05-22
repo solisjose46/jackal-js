@@ -6,7 +6,9 @@ class GameObject{
         this.height = height;
         this.width = width;
         this.left = left;
+        this.right = this.left + this.width;
         this.top = top;
+        this.bottom = this.top + this.height;
 
         var div = document.createElement('DIV');
         div.className = 'mapObjects';
@@ -138,14 +140,14 @@ class Projectile extends GameObject{
             lat = this.moveY();
             
         }
-        var results = this.projectileCollision();
+        var results = this.projectileCollision(lng, (lng + this.width), lat, (lat + this.height));
         if(this.inBounds(lng, lat) == 1 && !results.impact){
             this.setLeft(lng);
             this.setTop(lat);
         }
         return results;
     }
-    projectileCollision(){
+    projectileCollision(left, right, top, bottom){
         var toReturn = {
             impact: false,
             object: null
@@ -154,7 +156,7 @@ class Projectile extends GameObject{
         for(var i = 0; i < obstacles.length; i++){
             var obstacle = obstacles[i];
             for(var j = 0; j < obstacle.length; j++){
-                if(this.collision(this, obstacle[j])){
+                if(this.collision(left, right, top, bottom, obstacle[j])){
                     toReturn.impact = true;
                     toReturn.object = obstacle[j];
                     return toReturn;
@@ -163,10 +165,8 @@ class Projectile extends GameObject{
         }
         return toReturn;
     }
-    collision(object1, object2){
-        var rectangleOne = object1.getNums;
-        var rectangleTwo = object2.getNums;
-        if (rectangleOne.left < rectangleTwo.right && rectangleOne.right > rectangleTwo.left && rectangleOne.top < rectangleTwo.bottom && rectangleOne.bottom > rectangleTwo.top) {
+    collision(left, right, top, bottom, object2){
+        if (left < object2.getNums.right && right > object2.getNums.left && top < object2.getNums.bottom && bottom > object2.getNums.top) {
             return true; //collision detected
         }
         return false;        
@@ -223,8 +223,8 @@ class Shooter extends Projectile{
             this.move(this.direction);
         }
     }
-    shoot(rocketImage){
-        var rocket = new Rocket(this.left, this.top, rocketImage, this.direction, this.obstacleRoles, this.role);
+    shoot(rocketImage, rocketObstacles){
+        var rocket = new Rocket(this.left, this.top, rocketImage, this.direction, rocketObstacles, this.role);
         rocket.flight();
     }
 };
@@ -244,16 +244,10 @@ class Rocket extends Projectile{
                 clearInterval(flightInterval);
                 if(flightResults.impact){
                     if(flightResults.object.role == 'player'){
-                        console.log('player hit');
+                        flightResults.object.playerHit();
                     }
                     else if((flightResults.object.role == 'turret' || flightResults.object.role == 'removable') && this.shooter == 'player'){
-                        if(flightResults.object.role == 'removable'){
-                            flightResults.object.removeDoor();
-                        }
-                        else{
-                            flightResults.object.html.remove();
-                        }
-                        mapObjects.splice(mapObjects.indexOf(flightResults.object));
+                        flightResults.object.removeObject();
                     }
                 }
                 this.explode();
@@ -274,10 +268,15 @@ class Rocket extends Projectile{
 class Player extends Shooter{
     constructor(height, width, left, top, obstacleRoles){
         super(height, width, left, top, 'tanks/blue-n.png', 'player', 'north', 12, obstacleRoles, tankLibrary);
+        this.rocketObstacles = ['removable', 'turret'];
     }
     shootRocket(){
         var rocketImage = rocketLibrary.find(({direction}) => direction === this.direction);
-        this.shoot(rocketImage.img);
+        this.shoot(rocketImage.img, this.rocketObstacles);
+    }
+    playerHit(){
+        location.reload();
+        console.log('hit');
     }
 };
 
@@ -285,6 +284,7 @@ class Turret extends Shooter{
     constructor(height, width, left, top, obstacleRoles){
         super(height, width, left, top, 'enemies/turret-s.png', 'turret', 'south', 0, obstacleRoles, turretLibrary);
         this.rangeSquare = new GameObject(230, 230, (this.left - 100), (this.top - 100), '', 'rangeSquare', null);
+        this.rocketObstacles = ['nonremovable', 'removable', 'player'];
     }
     rotateTurret(direction){
         var rotateTime = 150;
@@ -325,7 +325,7 @@ class Turret extends Shooter{
         return direction;
     }
     turretShoot(player){
-        if(this.collision(player, this.rangeSquare)){
+        if(this.collision(player.left, player.right, player.top, player.bottom, this.rangeSquare)){
             var newDirection = this.repositionTurret(player);
             this.rotateTurret(newDirection);
             setTimeout(() => {
@@ -334,9 +334,13 @@ class Turret extends Shooter{
         }
     }
     shootRocket(){
-        console.log('shootRocket');
         var rocketImage = 'assets/weapons/projectile.png';
-        this.shoot(rocketImage);
+        this.shoot(rocketImage, this.obstacleRoles); //this is it?
+    }
+    removeObject(){
+        mapObjects.splice(mapObjects.indexOf(this),1);
+        this.rangeSquare.html.remove();
+        this.html.remove();
     }
 };
 
@@ -345,7 +349,21 @@ class Door extends GameObject{
         super(height, width, left, top, 'assets/environment/infrastructure/broken-door.png', 'removeable', '');
         this.html.style.display = 'none'; //when hit change to 'block' and remove from mapObejcts (soft delete)
     }
-    removeDoor(){
+    removeObject(){
+        mapObjects.splice(mapObjects.indexOf(this),1);
         this.html.style.display = 'block';
     }
 }
+
+class Pad extends GameObject{
+    //constructor(height, width, left, top, imageSrc, role, direction)
+    constructor(height, width, left, top, imageSrc, role, direction){
+        super(height, width, left, top, imageSrc, role, direction);
+    }
+    victory(player){
+        var turrets = mapObjects.filter(({role}) => role === 'turret');
+        if(player.collision(this.left, this.right, this.top, this.bottom, playerw) && turrets.length == 0){
+            console.log('victory!!!');
+        }
+    }
+};
