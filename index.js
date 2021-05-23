@@ -1,32 +1,33 @@
 var playerObstacles = ['removable', 'turret', 'nonremovable'];
 var turretObstacles = ['player', 'nonremovable', 'removable'];
+var modalText = document.getElementById('ModalLabel');
 
 window.addEventListener('load', loadGameObjects());
 
 var player;
 var launchPad;
 function loadGameObjects(){
+    var intro = 'Eliminate all turrets and get to the choppa!';
+    modalText.innerText = intro;
+    $('#myModal').modal('toggle');
     var gameObject;
     for(var i = 0; i < objects.length; i++){
         gameObject = objects[i];
         var pushObject;
         if(i == 0){
             pushObject = new Door(gameObject.height, gameObject.width, gameObject.left, gameObject.top);
-
         }
         else if(i == 1){
             pushObject = new Pad(gameObject.height, gameObject.width, gameObject.left, gameObject.top, 'assets/environment/infrastructure/landing-pad.gif', 'none', '');
             launchPad = pushObject;
         }
         else if(2 <= i && i <= 16){
-            pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles);
-            // if(i==7 || i==8){
-            //     pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles.splice(1,1));
-                
-            // }
-            // else{
-            //     pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles);
-            // }
+            if(i == 7 || i == 8){
+                pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, ['player', 'removable']);
+            }
+            else{
+                pushObject = new Turret(gameObject.height, gameObject.width, gameObject.left, gameObject.top, turretObstacles);
+            }
         }
         else if(17 <= i && i <= 47){
             pushObject = new GameObject(gameObject.height, gameObject.width, gameObject.left, gameObject.top, '', 'nonremovable', '');

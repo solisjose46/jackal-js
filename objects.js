@@ -1,6 +1,6 @@
 var game = document.getElementById('game-container');
 var mapObjects = [];
-
+//roles: player, removable, none, turret, nonremovable
 class GameObject{
     constructor(height, width, left, top, imageSrc, role, direction){
         this.height = height;
@@ -13,7 +13,6 @@ class GameObject{
         var div = document.createElement('DIV');
         div.className = 'mapObjects';
         var image = document.createElement('IMG');
-        //image.className = 'mapObjects';
         image.src = imageSrc;
         div.appendChild(image);
         
@@ -275,8 +274,11 @@ class Player extends Shooter{
         this.shoot(rocketImage.img, this.rocketObstacles);
     }
     playerHit(){
-        location.reload();
-        console.log('hit');
+        modalText.innerText = 'Mission Failure...';
+        $('#myModal').modal('show');
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            location.reload();
+        });
     }
 };
 
@@ -284,7 +286,6 @@ class Turret extends Shooter{
     constructor(height, width, left, top, obstacleRoles){
         super(height, width, left, top, 'enemies/turret-s.png', 'turret', 'south', 0, obstacleRoles, turretLibrary);
         this.rangeSquare = new GameObject(230, 230, (this.left - 100), (this.top - 100), '', 'rangeSquare', null);
-        this.rocketObstacles = ['nonremovable', 'removable', 'player'];
     }
     rotateTurret(direction){
         var rotateTime = 150;
@@ -346,7 +347,7 @@ class Turret extends Shooter{
 
 class Door extends GameObject{
     constructor(height, width, left, top){
-        super(height, width, left, top, 'assets/environment/infrastructure/broken-door.png', 'removeable', '');
+        super(height, width, left, top, 'assets/environment/infrastructure/broken-door.png', 'removable', '');
         this.html.style.display = 'none'; //when hit change to 'block' and remove from mapObejcts (soft delete)
     }
     removeObject(){
@@ -362,8 +363,10 @@ class Pad extends GameObject{
     }
     victory(player){
         var turrets = mapObjects.filter(({role}) => role === 'turret');
-        if(player.collision(this.left, this.right, this.top, this.bottom, playerw) && turrets.length == 0){
-            console.log('victory!!!');
+        if(player.collision(this.left, this.right, this.top, this.bottom, player) && turrets.length == 0){
+            modalText.innerText = 'Mission Accomplished!';
+            $('#myModal').modal('toggle');
+            location.reload();
         }
     }
 };
